@@ -12,28 +12,33 @@
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
-    <Canvas x:Name="canvas" Background="White" 
-                MouseLeftButtonDown="Canvas_MouseLeftButtonDown" 
-                MouseMove="Canvas_MouseMove" 
-                MouseLeftButtonUp="Canvas_MouseLeftButtonUp">
-        <ItemsControl ItemsSource="{Binding States}">
+    <Canvas x:Name="canvas" Background="White" >
+        <ItemsControl ItemsSource="{Binding Shapes}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas Background="White"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Ellipse Fill="LightBlue" Width="50" Height="50"
-                                     Margin="{Binding Path=Position, Converter={StaticResource converter:positionToMarginConverter}}">
-                            <bhv:Interaction.Triggers>
-                                <bhv:EventTrigger EventName="MouseLeftButtonDown">
-                                    <bhv:InvokeCommandAction Command="{Binding DataContext.SelectStateCommand, RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}" 
-                                                            CommandParameter="{Binding}" />
-                                </bhv:EventTrigger>
-                            </bhv:Interaction.Triggers>
-                        </Ellipse>
-                        <TextBlock Text="{Binding Name}" 
-                                       Margin="{Binding Path=Position, Converter={StaticResource converter:positionToMarginConverter}, ConverterParameter=40}" />
-                    </Grid>
+                    <ContentControl Content="{Binding}">
+                        <ContentControl.Resources>
+                            <DataTemplate DataType="{x:Type vm:LineViewModel}">
+                                <local:LineControl />
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type vm:EllipseViewModel}">
+                                <local:EllipseControl />
+                            </DataTemplate>
+                        </ContentControl.Resources>
+                    </ContentControl>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Canvas.Left" Value="{Binding Left}" />
+                    <Setter Property="Canvas.Top" Value="{Binding Top}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
         </ItemsControl>
     </Canvas>
 </Window>
