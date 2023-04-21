@@ -76,6 +76,12 @@
                                                 <bhv:InvokeCommandAction Command="{Binding DataContext.MouseUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                            CommandParameter="{Binding}" />
                                             </bhv:EventTrigger>
+
+                                            <bhv:EventTrigger EventName="MouseMove">
+
+                                                <bhv:InvokeCommandAction Command="{Binding DataContext.MouseMoveCommand2, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                           CommandParameter="{Binding}" />
+                                            </bhv:EventTrigger>
                                         </bhv:Interaction.Triggers>
                                     </local:NodeControl>
                                 </DataTemplate>

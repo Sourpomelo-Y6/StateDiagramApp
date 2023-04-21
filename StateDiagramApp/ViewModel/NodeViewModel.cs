@@ -76,6 +76,25 @@ namespace StateDiagramApp.ViewModel
             } 
         }
 
+        private bool selected2 = false;
+        public bool Selected2
+        {
+            get { return selected2; }
+            set
+            {
+                selected2 = value;
+                if (selected2)
+                {
+                    SelectMark = Brushes.Blue;
+                }
+                else
+                {
+                    SelectMark = Brushes.Transparent;
+                }
+                OnPropertyChanged("Selected2");
+            }
+        }
+
         private Brush selectMark = Brushes.Transparent;
         public Brush SelectMark
         {

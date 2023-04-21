@@ -18,6 +18,7 @@ namespace StateDiagramApp.ViewModel
     {
         private StateDiagram stateDiagram;
         private State selectedState;
+
         private Point startPoint;
         private bool isDragging;
 
@@ -70,6 +71,8 @@ namespace StateDiagramApp.ViewModel
         public ICommand MouseMoveCommand { get; }
         public ICommand MouseUpCommand { get; }
 
+        public ICommand MouseMoveCommand2 { get; }
+
         public MainViewModel()
         {
             ClickModeBrush = Brushes.Red;
@@ -88,6 +91,8 @@ namespace StateDiagramApp.ViewModel
             MouseDownCommand = new RelayCommand<object>(MouseDown);
             MouseMoveCommand = new RelayCommand<object>(MouseMove);
             MouseUpCommand = new RelayCommand<object>(MouseUp);
+
+            MouseMoveCommand2 = new RelayCommand<object>(MouseMove2);
 
             ChangeModeClickCommand = new RelayCommand(ChangeModeClick);
             ChangeModeLineCommand = new RelayCommand(ChangeModeLine);
@@ -281,7 +286,7 @@ namespace StateDiagramApp.ViewModel
             get { return selectedNode; }
             set 
             {
-                if (selectedNode != null) 
+                if (selectedNode != null && selectedNode != value) 
                 {
                     selectedNode.Selected = false;
                 }
@@ -293,6 +298,27 @@ namespace StateDiagramApp.ViewModel
                     selectedNode.Selected = true;
                 }
                 OnPropertyChanged("SelectedNode");
+            }
+        }
+
+        private NodeViewModel selectedNode2;
+        public NodeViewModel SelectedNode2
+        {
+            get { return selectedNode2; }
+            set
+            {
+                if (selectedNode2 != null && selectedNode2 != value)
+                {
+                    selectedNode2.Selected2 = false;
+                }
+
+                selectedNode2 = value;
+
+                if (selectedNode2 != null)
+                {
+                    selectedNode2.Selected2 = true;
+                }
+                OnPropertyChanged("SelectedNode2");
             }
         }
 
@@ -312,9 +338,12 @@ namespace StateDiagramApp.ViewModel
                 if (parameter is NodeViewModel Node)
                 {
                     SelectedNode = Node;
+                    isDragging = true;
                 }
             }
         }
+        
+        bool flag_free = false;
 
         private void MouseMove(object parameter)
         {
@@ -331,6 +360,45 @@ namespace StateDiagramApp.ViewModel
                     startPoint = currentPosition;
                 }
             }
+            else if (NowMode == ControlMode.LineMode)
+            {
+                if (isDragging)
+                {
+                    if (flag_free)
+                    {
+                        SelectedNode2 = null;
+                    }
+                    else 
+                    {
+                        flag_free = true;
+                    }
+                }
+            }
+        }
+
+        private void MouseMove2(object parameter)
+        {
+            if (NowMode == ControlMode.LineMode)
+            {
+                NodeViewModel work = null;
+                if (isDragging)
+                {
+                    if (parameter is NodeViewModel Node)
+                    {
+                        if (SelectedNode != Node)
+                        {
+                            work = Node;
+                        }
+                    }
+
+                    if (work == null)
+                    {
+                        flag_free = true;
+                    }
+                    else flag_free = false;
+                    SelectedNode2 = work;
+                }
+            }
         }
 
         private void MouseUp(object parameter)
@@ -342,7 +410,9 @@ namespace StateDiagramApp.ViewModel
             }
             else if (NowMode == ControlMode.LineMode) 
             {
+                isDragging = false;
                 SelectedNode = null;
+                SelectedNode2 = null;
             }
         }
 
