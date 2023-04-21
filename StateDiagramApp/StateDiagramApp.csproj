@@ -62,7 +62,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Converter\PositionToMarginConverter.cs" />
+    <Compile Include="Model\StateTransition.cs" />
     <Compile Include="ViewModel\NodeViewModel.cs" />
     <Compile Include="ViewModel\TransitionViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

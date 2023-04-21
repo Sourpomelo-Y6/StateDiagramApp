@@ -6,35 +6,27 @@
         xmlns:bhv="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:StateDiagramApp.View"
         xmlns:vm="clr-namespace:StateDiagramApp.ViewModel"
-        xmlns:converter="clr-namespace:StateDiagramApp.Converter"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <DataTemplate x:Key="RadioButtonTemplate1">
+        <DataTemplate x:Key="ClickRadioButtonTemplate">
             <StackPanel>
-                <Image Source="/Icons/Click.png"
-               Width="32"
-               Height="32"/>
-
+                <Image Source="/Icons/Click.png" Width="32" Height="32"/>
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="RadioButtonTemplate2">
+        <DataTemplate x:Key="NewRadioButtonTemplate">
             <StackPanel>
-                <Image Source="/Icons/New.png"
-               Width="32"
-               Height="32"/>
+                <Image Source="/Icons/New.png" Width="32" Height="32"/>
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="RadioButtonTemplate3">
+        <DataTemplate x:Key="LineRadioButtonTemplate">
             <StackPanel>
-                <Image Source="/Icons/Line.png"
-               Width="32"
-               Height="32"/>
+                <Image Source="/Icons/Line.png" Width="32" Height="32"/>
             </StackPanel>
         </DataTemplate>
 
@@ -51,33 +43,33 @@
         </Menu>
         <ToolBar Height="50" DockPanel.Dock="Top">
             <RadioButton IsChecked="{Binding IsClickRadioButtonSelected}"
-                         ContentTemplate="{StaticResource RadioButtonTemplate1}">
+                         ContentTemplate="{StaticResource ClickRadioButtonTemplate}">
                 
             </RadioButton>
             <RadioButton IsChecked="{Binding IsNewRadioButtonSelected}"
-                         ContentTemplate="{StaticResource RadioButtonTemplate2}">
+                         ContentTemplate="{StaticResource NewRadioButtonTemplate}">
                 
             </RadioButton>
             <RadioButton IsChecked="{Binding IsLineRadioButtonSelected}"
-                         ContentTemplate="{StaticResource RadioButtonTemplate3}">
+                         ContentTemplate="{StaticResource LineRadioButtonTemplate}">
                 
             </RadioButton>
         </ToolBar>
         <Canvas Background="White" >
             <bhv:Interaction.Triggers>
                 <bhv:EventTrigger EventName="MouseDown">
-                    <bhv:InvokeCommandAction Command="{Binding DataContext.MouseDownCommand2, RelativeSource={RelativeSource AncestorType=Window}}"
+                    <bhv:InvokeCommandAction Command="{Binding DataContext.WindowMouseDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                            CommandParameter="{Binding}" />
                 </bhv:EventTrigger>
 
                 <bhv:EventTrigger EventName="MouseUp">
-                    <bhv:InvokeCommandAction Command="{Binding DataContext.MouseUpCommand2, RelativeSource={RelativeSource AncestorType=Window}}"
+                    <bhv:InvokeCommandAction Command="{Binding DataContext.WindowMouseUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                            CommandParameter="{Binding}" />
                 </bhv:EventTrigger>
 
                 <bhv:EventTrigger EventName="MouseMove">
 
-                    <bhv:InvokeCommandAction Command="{Binding DataContext.MouseMoveCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    <bhv:InvokeCommandAction Command="{Binding DataContext.WindowMouseMoveCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                            CommandParameter="{Binding}" />
                 </bhv:EventTrigger>
                 
@@ -96,12 +88,12 @@
                                     <local:TransitionControl >
                                         <bhv:Interaction.Triggers>
                                             <bhv:EventTrigger EventName="MouseDown">
-                                                <bhv:InvokeCommandAction Command="{Binding DataContext.MouseDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                <bhv:InvokeCommandAction Command="{Binding DataContext.ItemMouseDownCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
                                                            CommandParameter="{Binding}" />
                                             </bhv:EventTrigger>
 
                                             <bhv:EventTrigger EventName="MouseUp">
-                                                <bhv:InvokeCommandAction Command="{Binding DataContext.MouseUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                <bhv:InvokeCommandAction Command="{Binding DataContext.ItemMouseUpCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
                                                            CommandParameter="{Binding}" />
                                             </bhv:EventTrigger>
                                         </bhv:Interaction.Triggers>
@@ -111,18 +103,18 @@
                                     <local:NodeControl>
                                         <bhv:Interaction.Triggers>
                                             <bhv:EventTrigger EventName="MouseDown">
-                                                <bhv:InvokeCommandAction Command="{Binding DataContext.MouseDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                <bhv:InvokeCommandAction Command="{Binding DataContext.ItemMouseDownCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
                                                            CommandParameter="{Binding}" />
                                             </bhv:EventTrigger>
 
                                             <bhv:EventTrigger EventName="MouseUp">
-                                                <bhv:InvokeCommandAction Command="{Binding DataContext.MouseUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                <bhv:InvokeCommandAction Command="{Binding DataContext.ItemMouseUpCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
                                                            CommandParameter="{Binding}" />
                                             </bhv:EventTrigger>
 
                                             <bhv:EventTrigger EventName="MouseMove">
 
-                                                <bhv:InvokeCommandAction Command="{Binding DataContext.MouseMoveCommand2, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                <bhv:InvokeCommandAction Command="{Binding DataContext.ItemMouseMoveCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
                                                            CommandParameter="{Binding}" />
                                             </bhv:EventTrigger>
                                         </bhv:Interaction.Triggers>

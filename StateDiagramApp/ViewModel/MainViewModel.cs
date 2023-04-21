@@ -19,7 +19,6 @@ namespace StateDiagramApp.ViewModel
     class MainViewModel : ObservableObject
     {
         private StateDiagram stateDiagram;
-        private State selectedState;
 
         private Point startPoint;
         private bool isDragging;
@@ -40,13 +39,13 @@ namespace StateDiagramApp.ViewModel
  
         public ControlMode NowMode = ControlMode.None;
 
-        public ICommand MouseDownCommand { get; }
-        public ICommand MouseMoveCommand { get; }
-        public ICommand MouseUpCommand { get; }
+        public ICommand ItemMouseDownCommand { get; }
+        public ICommand ItemMouseMoveCommand { get; }
+        public ICommand ItemMouseUpCommand { get; }
 
-        public ICommand MouseDownCommand2 { get; }
-        public ICommand MouseMoveCommand2 { get; }
-        public ICommand MouseUpCommand2 { get; }
+        public ICommand WindowMouseDownCommand { get; }
+        public ICommand WindowMouseMoveCommand { get; }
+        public ICommand WindowMouseUpCommand { get; }
 
         public MainViewModel()
         {
@@ -55,13 +54,13 @@ namespace StateDiagramApp.ViewModel
             stateDiagram = new StateDiagram();
             States = new ObservableCollection<State>();
 
-            MouseDownCommand = new RelayCommand<object>(MouseDown);
-            MouseMoveCommand = new RelayCommand<object>(MouseMove);
-            MouseUpCommand = new RelayCommand<object>(MouseUp);
+            ItemMouseDownCommand = new RelayCommand<object>(ItemMouseDown);
+            ItemMouseMoveCommand = new RelayCommand<object>(ItemMouseMove);
+            ItemMouseUpCommand = new RelayCommand<object>(ItemMouseUp);
 
-            MouseDownCommand2 = new RelayCommand<object>(MouseDown2);
-            MouseMoveCommand2 = new RelayCommand<object>(MouseMove2);
-            MouseUpCommand2 = new RelayCommand<object>(MouseUp2);
+            WindowMouseDownCommand = new RelayCommand<object>(WindowMouseDown);
+            WindowMouseMoveCommand = new RelayCommand<object>(WindowMouseMove);
+            WindowMouseUpCommand = new RelayCommand<object>(WindowMouseUp);
 
 
             var workState1 = new State("1", new Point(0, 0));
@@ -169,7 +168,7 @@ namespace StateDiagramApp.ViewModel
             }
         }
 
-        private void MouseDown(object parameter)
+        private void ItemMouseDown(object parameter)
         {
             if (NowMode == ControlMode.ClickMode)
             {
@@ -191,48 +190,18 @@ namespace StateDiagramApp.ViewModel
 
         }
 
-        private void MouseDown2(object parameter) 
+        private void WindowMouseDown(object parameter) 
         {
             if (NowMode == ControlMode.NewMode)
             {
                 startPoint = Mouse.GetPosition(null);
             }
         }
-        
+
+
         bool flag_free = false;
 
-        private void MouseMove(object parameter)
-        {
-            if (NowMode == ControlMode.ClickMode)
-            {
-                if (isDragging)
-                {
-                    var currentPosition = Mouse.GetPosition(null);
-                    var deltaX = currentPosition.X - startPoint.X;
-                    var deltaY = currentPosition.Y - startPoint.Y;
-                    var nowPosition = SelectedNode.Position;
-                    SelectedNode.Position = new Point(nowPosition.X + deltaX, nowPosition.Y + deltaY);
-
-                    startPoint = currentPosition;
-                }
-            }
-            else if (NowMode == ControlMode.LineMode)
-            {
-                if (isDragging)
-                {
-                    if (flag_free)
-                    {
-                        SelectedNode2 = null;
-                    }
-                    else 
-                    {
-                        flag_free = true;
-                    }
-                }
-            }
-        }
-
-        private void MouseMove2(object parameter)
+        private void ItemMouseMove(object parameter)
         {
             if (NowMode == ControlMode.LineMode)
             {
@@ -257,7 +226,38 @@ namespace StateDiagramApp.ViewModel
             }
         }
 
-        private void MouseUp(object parameter)
+        private void WindowMouseMove(object parameter)
+        {
+            if (NowMode == ControlMode.ClickMode)
+            {
+                if (isDragging)
+                {
+                    var currentPosition = Mouse.GetPosition(null);
+                    var deltaX = currentPosition.X - startPoint.X;
+                    var deltaY = currentPosition.Y - startPoint.Y;
+                    var nowPosition = SelectedNode.Position;
+                    SelectedNode.Position = new Point(nowPosition.X + deltaX, nowPosition.Y + deltaY);
+
+                    startPoint = currentPosition;
+                }
+            }
+            else if (NowMode == ControlMode.LineMode)
+            {
+                if (isDragging)
+                {
+                    if (flag_free)
+                    {
+                        SelectedNode2 = null;
+                    }
+                    else
+                    {
+                        flag_free = true;
+                    }
+                }
+            }
+        }
+
+        private void ItemMouseUp(object parameter)
         {
             if (NowMode == ControlMode.ClickMode)
             {
@@ -277,7 +277,7 @@ namespace StateDiagramApp.ViewModel
             
         }
 
-        private void MouseUp2(object obj)
+        private void WindowMouseUp(object obj)
         {
             if (NowMode == ControlMode.NewMode)
             {

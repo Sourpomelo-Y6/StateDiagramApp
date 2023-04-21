@@ -45,15 +45,4 @@ namespace StateDiagramApp.Model
             state.Position = newPosition;
         }
     }
-
-    public class StateTransition
-    {
-        public State ToState { get; set; }
-
-        public StateTransition(State toState)
-        {
-            ToState = toState;
-        }
-
-    }
 }
