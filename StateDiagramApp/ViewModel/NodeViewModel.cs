@@ -57,15 +57,34 @@ namespace StateDiagramApp.ViewModel
             }
         }
 
-        private bool seleced = false;
+        private bool selected = false;
         public bool Selected 
         {
-            get { return seleced; }
+            get { return selected; }
             set 
             {
-                seleced = value;
+                selected = value;
+                if (selected)
+                {
+                    SelectMark = Brushes.Red;
+                }
+                else 
+                {
+                    SelectMark = Brushes.Transparent;
+                }
                 OnPropertyChanged("Selected");
             } 
+        }
+
+        private Brush selectMark = Brushes.Transparent;
+        public Brush SelectMark
+        {
+            get { return selectMark; }
+            set
+            {
+                selectMark = value;
+                OnPropertyChanged("SelectMark");
+            }
         }
 
         public NodeViewModel(State state)

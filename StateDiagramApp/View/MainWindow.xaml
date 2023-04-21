@@ -65,7 +65,7 @@
                                     </local:TransitionControl>
                                 </DataTemplate>
                                 <DataTemplate DataType="{x:Type vm:NodeViewModel}">
-                                    <local:NodeControl SelectMark="{Binding Selected}">
+                                    <local:NodeControl>
                                         <bhv:Interaction.Triggers>
                                             <bhv:EventTrigger EventName="MouseDown">
                                                 <bhv:InvokeCommandAction Command="{Binding DataContext.MouseDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"
