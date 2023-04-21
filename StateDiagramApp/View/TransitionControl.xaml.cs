@@ -18,9 +18,9 @@ namespace StateDiagramApp.View
     /// <summary>
     /// LineControl.xaml の相互作用ロジック
     /// </summary>
-    public partial class LineControl : UserControl
+    public partial class TransitionControl : UserControl
     {
-        public LineControl()
+        public TransitionControl()
         {
             InitializeComponent();
         }

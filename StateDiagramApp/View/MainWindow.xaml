@@ -13,6 +13,13 @@
         <vm:MainViewModel/>
     </Window.DataContext>
     <Canvas x:Name="canvas" Background="White" >
+        <bhv:Interaction.Triggers>
+            <bhv:EventTrigger EventName="MouseMove">
+
+                <bhv:InvokeCommandAction Command="{Binding DataContext.MouseMoveCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                       CommandParameter="{Binding}" />
+            </bhv:EventTrigger>
+        </bhv:Interaction.Triggers>
         <ItemsControl ItemsSource="{Binding Shapes}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -23,14 +30,39 @@
                 <DataTemplate>
                     <ContentControl Content="{Binding}">
                         <ContentControl.Resources>
-                            <DataTemplate DataType="{x:Type vm:LineViewModel}">
-                                <local:LineControl />
+                            <DataTemplate DataType="{x:Type vm:TransitionViewModel}">
+                                <local:TransitionControl >
+                                    <bhv:Interaction.Triggers>
+                                        <bhv:EventTrigger EventName="MouseDown">
+                                            <bhv:InvokeCommandAction Command="{Binding DataContext.MouseDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                       CommandParameter="{Binding}" />
+                                        </bhv:EventTrigger>
+
+                                        <bhv:EventTrigger EventName="MouseUp">
+                                            <bhv:InvokeCommandAction Command="{Binding DataContext.MouseUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                       CommandParameter="{Binding}" />
+                                        </bhv:EventTrigger>
+                                    </bhv:Interaction.Triggers>
+                                </local:TransitionControl>
                             </DataTemplate>
-                            <DataTemplate DataType="{x:Type vm:EllipseViewModel}">
-                                <local:EllipseControl />
+                            <DataTemplate DataType="{x:Type vm:NodeViewModel}">
+                                <local:NodeControl >
+                                    <bhv:Interaction.Triggers>
+                                        <bhv:EventTrigger EventName="MouseDown">
+                                            <bhv:InvokeCommandAction Command="{Binding DataContext.MouseDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                       CommandParameter="{Binding}" />
+                                        </bhv:EventTrigger>
+
+                                        <bhv:EventTrigger EventName="MouseUp">
+                                            <bhv:InvokeCommandAction Command="{Binding DataContext.MouseUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                       CommandParameter="{Binding}" />
+                                        </bhv:EventTrigger>
+                                    </bhv:Interaction.Triggers>
+                                </local:NodeControl>
                             </DataTemplate>
                         </ContentControl.Resources>
                     </ContentControl>
+                    
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemContainerStyle>

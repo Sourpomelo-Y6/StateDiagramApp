@@ -63,18 +63,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converter\PositionToMarginConverter.cs" />
-    <Compile Include="ViewModel\EllipseViewModel.cs" />
-    <Compile Include="ViewModel\LineViewModel.cs" />
+    <Compile Include="ViewModel\NodeViewModel.cs" />
+    <Compile Include="ViewModel\TransitionViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ObservableObject.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="Model\State.cs" />
     <Compile Include="Model\StateDiagram.cs" />
-    <Compile Include="View\EllipseControl.xaml.cs">
-      <DependentUpon>EllipseControl.xaml</DependentUpon>
+    <Compile Include="View\NodeControl.xaml.cs">
+      <DependentUpon>NodeControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\LineControl.xaml.cs">
-      <DependentUpon>LineControl.xaml</DependentUpon>
+    <Compile Include="View\TransitionControl.xaml.cs">
+      <DependentUpon>TransitionControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -111,11 +111,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="View\EllipseControl.xaml">
+    <Page Include="View\NodeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\LineControl.xaml">
+    <Page Include="View\TransitionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

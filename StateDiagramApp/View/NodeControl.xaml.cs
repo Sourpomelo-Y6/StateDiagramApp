@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace StateDiagramApp.View
 {
     /// <summary>
-    /// EllipseControl.xaml の相互作用ロジック
+    /// NodeControl.xaml の相互作用ロジック
     /// </summary>
-    public partial class EllipseControl : UserControl
+    public partial class NodeControl : UserControl
     {
-        public EllipseControl()
+        public NodeControl()
         {
             InitializeComponent();
         }
