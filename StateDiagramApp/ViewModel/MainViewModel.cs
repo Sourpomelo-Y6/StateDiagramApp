@@ -133,7 +133,6 @@ namespace StateDiagramApp.ViewModel
                 //Shapes.Add(newNodeViewModel);
                 newNodeViewModel.transitionViewModels = new List<TransitionViewModel>();
                 NodeViewModels.Add(newNodeViewModel);
-
             }
 
             foreach (var nodeViewModel in NodeViewModels) 
@@ -410,10 +409,21 @@ namespace StateDiagramApp.ViewModel
             }
             else if (NowMode == ControlMode.LineMode) 
             {
+                AddTransition(SelectedNode,SelectedNode2);
                 isDragging = false;
                 SelectedNode = null;
                 SelectedNode2 = null;
             }
+        }
+
+        private void AddTransition(NodeViewModel selectedNode, NodeViewModel selectedNode2)
+        {
+            var transition = new StateTransition(selectedNode2.NodeState);
+            selectedNode.NodeState.Transitions.Add(transition);
+            var newTransitionViewModel = new TransitionViewModel(selectedNode,selectedNode2,transition);
+            selectedNode.transitionViewModels.Add(newTransitionViewModel);
+            selectedNode2.transitionViewModels.Add(newTransitionViewModel);
+            Shapes.Add(newTransitionViewModel);
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
