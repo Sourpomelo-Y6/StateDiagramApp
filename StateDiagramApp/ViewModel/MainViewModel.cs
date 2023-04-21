@@ -1,5 +1,6 @@
 ﻿using StateDiagramApp.Model;
 using StateDiagramApp.View;
+using StateDiagramApp.ViewModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -21,12 +22,38 @@ namespace StateDiagramApp.ViewModel
         private bool isDragging;
 
         public ObservableCollection<State> States { get; set; }
-        public State SelectedState;
-        private NodeViewModel _selectedNode;
 
         public ObservableCollection<NodeViewModel> NodeViewModels;
 
         public ObservableCollection<object> Shapes { get; set; }
+
+        public enum ControlMode 
+        { 
+            ClickMode,
+            LineMode
+        }
+ 
+        public ControlMode NowMode = ControlMode.ClickMode;
+        private Brush clickModeBrush;
+        public Brush ClickModeBrush
+        { 
+            get { return clickModeBrush; }
+            set 
+            {
+                clickModeBrush = value;
+                OnPropertyChanged("ClickModeBrush");
+            }
+        }
+        private Brush lineModeBrush;
+        public Brush LineModeBrush
+        { 
+            get { return lineModeBrush; }
+            set 
+            {
+                lineModeBrush = value;
+                OnPropertyChanged("LineModeBrush");
+            }
+        }
 
         public ICommand AddStateCommand { get; private set; }
         public ICommand AddTransitionCommand { get; private set; }
@@ -35,12 +62,19 @@ namespace StateDiagramApp.ViewModel
         public ICommand SelectStateCommand { get; private set; }
         public ICommand MoveStateCommand { get; private set; }
 
+        public ICommand ChangeModeClickCommand { get; }
+        public ICommand ChangeModeLineCommand { get; }
+
+
         public ICommand MouseDownCommand { get; }
         public ICommand MouseMoveCommand { get; }
         public ICommand MouseUpCommand { get; }
 
         public MainViewModel()
         {
+            ClickModeBrush = Brushes.Red;
+            LineModeBrush = Brushes.Transparent;
+
             stateDiagram = new StateDiagram();
             States = new ObservableCollection<State>();
             
@@ -54,6 +88,9 @@ namespace StateDiagramApp.ViewModel
             MouseDownCommand = new RelayCommand<object>(MouseDown);
             MouseMoveCommand = new RelayCommand<object>(MouseMove);
             MouseUpCommand = new RelayCommand<object>(MouseUp);
+
+            ChangeModeClickCommand = new RelayCommand(ChangeModeClick);
+            ChangeModeLineCommand = new RelayCommand(ChangeModeLine);
 
             var workState1 = new State("1", new Point(0, 0));
             var workState2 = new State("2", new Point(100, 100)) { };
@@ -83,6 +120,7 @@ namespace StateDiagramApp.ViewModel
             States.Add(workState4);
 
             Shapes = new ObservableCollection<object>();
+            
             NodeViewModels = new ObservableCollection<NodeViewModel>();
             foreach (var State in States)
             {
@@ -114,6 +152,22 @@ namespace StateDiagramApp.ViewModel
                 }
                 Shapes.Add(nodeViewModel);
             }
+        }
+
+        private void ChangeModeLine()
+        {
+            NowMode = ControlMode.LineMode;
+
+            ClickModeBrush = Brushes.Transparent;
+            LineModeBrush = Brushes.Red;
+        }
+
+        private void ChangeModeClick()
+        {
+            NowMode = ControlMode.ClickMode;
+            
+            ClickModeBrush = Brushes.Red;
+            LineModeBrush = Brushes.Transparent;
         }
 
         private void AddState()
@@ -221,34 +275,75 @@ namespace StateDiagramApp.ViewModel
             }
         }
 
+        private NodeViewModel selectedNode;
+        public NodeViewModel SelectedNode 
+        {
+            get { return selectedNode; }
+            set 
+            {
+                if (selectedNode != null) 
+                {
+                    selectedNode.Selected = false;
+                }
+
+                selectedNode = value;
+
+                if (selectedNode != null)
+                {
+                    selectedNode.Selected = true;
+                }
+                OnPropertyChanged("SelectedNode");
+            }
+        }
+
         private void MouseDown(object parameter)
         {
-            if (parameter is NodeViewModel Node)
+            if (NowMode == ControlMode.ClickMode)
             {
-                _selectedNode = Node;
-                startPoint = Mouse.GetPosition(null);
-                isDragging = true;
+                if (parameter is NodeViewModel Node)
+                {
+                    SelectedNode = Node;
+                    startPoint = Mouse.GetPosition(null);
+                    isDragging = true;
+                }
+            }
+            else if (NowMode == ControlMode.LineMode) 
+            {
+                if (parameter is NodeViewModel Node)
+                {
+                    SelectedNode = Node;
+                }
             }
         }
 
         private void MouseMove(object parameter)
         {
-            if (isDragging)
+            if (NowMode == ControlMode.ClickMode)
             {
-                var currentPosition = Mouse.GetPosition(null);
-                var deltaX = currentPosition.X - startPoint.X;
-                var deltaY = currentPosition.Y - startPoint.Y;
-                var nowPosition = _selectedNode.Position;
-                _selectedNode.Position = new Point(nowPosition.X + deltaX, nowPosition.Y + deltaY);
-                
-                startPoint = currentPosition;
+                if (isDragging)
+                {
+                    var currentPosition = Mouse.GetPosition(null);
+                    var deltaX = currentPosition.X - startPoint.X;
+                    var deltaY = currentPosition.Y - startPoint.Y;
+                    var nowPosition = SelectedNode.Position;
+                    SelectedNode.Position = new Point(nowPosition.X + deltaX, nowPosition.Y + deltaY);
+
+                    startPoint = currentPosition;
+                }
             }
         }
 
         private void MouseUp(object parameter)
         {
-            isDragging = false;
-            _selectedNode = null;
+            if (NowMode == ControlMode.ClickMode)
+            {
+                isDragging = false;
+                SelectedNode = null;
+            }
+            else if (NowMode == ControlMode.LineMode) 
+            {
+                SelectedNode = null;
+            }
         }
 
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -364,6 +459,7 @@ namespace StateDiagramApp.ViewModel
 
             selectedState = null;
         }
+
 
     }
 }

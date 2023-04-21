@@ -12,65 +12,85 @@
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
-    <Canvas x:Name="canvas" Background="White" >
-        <bhv:Interaction.Triggers>
-            <bhv:EventTrigger EventName="MouseMove">
 
-                <bhv:InvokeCommandAction Command="{Binding DataContext.MouseMoveCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                       CommandParameter="{Binding}" />
-            </bhv:EventTrigger>
-        </bhv:Interaction.Triggers>
-        <ItemsControl ItemsSource="{Binding Shapes}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas Background="White"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <ContentControl Content="{Binding}">
-                        <ContentControl.Resources>
-                            <DataTemplate DataType="{x:Type vm:TransitionViewModel}">
-                                <local:TransitionControl >
-                                    <bhv:Interaction.Triggers>
-                                        <bhv:EventTrigger EventName="MouseDown">
-                                            <bhv:InvokeCommandAction Command="{Binding DataContext.MouseDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                       CommandParameter="{Binding}" />
-                                        </bhv:EventTrigger>
+    <DockPanel >
+        <Menu Height="20" DockPanel.Dock="Top">
+            <MenuItem Header="_File(F)" InputGestureText="Ctrl+F" >
+                <MenuItem Header="_Open(O)" InputGestureText="Ctrl+O" Command="{Binding FileOpen}"/>
+                <MenuItem Header="_Save(S)" InputGestureText="Ctrl+S" Command="{Binding FileSave}"/>
+                
+                <Separator />
+                <MenuItem Header="_Exit(X)" InputGestureText="Ctrl+X" />
+            </MenuItem>
+        </Menu>
+        <ToolBar Height="40" DockPanel.Dock="Top">
+            <Button Command="{Binding ChangeModeClickCommand}" Background="{Binding ClickModeBrush}">
+                <Image Source="/Icons/Click.png" />
+            </Button>
+            <Button Command="{Binding ChangeModeLineCommand}" Background="{Binding LineModeBrush}">
+                <Image Source="/Icons/Line.png" />
+            </Button>
+        </ToolBar>
+        <Canvas Background="White" >
+            <bhv:Interaction.Triggers>
+                <bhv:EventTrigger EventName="MouseMove">
 
-                                        <bhv:EventTrigger EventName="MouseUp">
-                                            <bhv:InvokeCommandAction Command="{Binding DataContext.MouseUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                       CommandParameter="{Binding}" />
-                                        </bhv:EventTrigger>
-                                    </bhv:Interaction.Triggers>
-                                </local:TransitionControl>
-                            </DataTemplate>
-                            <DataTemplate DataType="{x:Type vm:NodeViewModel}">
-                                <local:NodeControl >
-                                    <bhv:Interaction.Triggers>
-                                        <bhv:EventTrigger EventName="MouseDown">
-                                            <bhv:InvokeCommandAction Command="{Binding DataContext.MouseDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                       CommandParameter="{Binding}" />
-                                        </bhv:EventTrigger>
+                    <bhv:InvokeCommandAction Command="{Binding DataContext.MouseMoveCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                           CommandParameter="{Binding}" />
+                </bhv:EventTrigger>
+            </bhv:Interaction.Triggers>
+            <ItemsControl ItemsSource="{Binding Shapes}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Background="White"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ContentControl Content="{Binding}">
+                            <ContentControl.Resources>
+                                <DataTemplate DataType="{x:Type vm:TransitionViewModel}">
+                                    <local:TransitionControl >
+                                        <bhv:Interaction.Triggers>
+                                            <bhv:EventTrigger EventName="MouseDown">
+                                                <bhv:InvokeCommandAction Command="{Binding DataContext.MouseDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                           CommandParameter="{Binding}" />
+                                            </bhv:EventTrigger>
 
-                                        <bhv:EventTrigger EventName="MouseUp">
-                                            <bhv:InvokeCommandAction Command="{Binding DataContext.MouseUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                       CommandParameter="{Binding}" />
-                                        </bhv:EventTrigger>
-                                    </bhv:Interaction.Triggers>
-                                </local:NodeControl>
-                            </DataTemplate>
-                        </ContentControl.Resources>
-                    </ContentControl>
+                                            <bhv:EventTrigger EventName="MouseUp">
+                                                <bhv:InvokeCommandAction Command="{Binding DataContext.MouseUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                           CommandParameter="{Binding}" />
+                                            </bhv:EventTrigger>
+                                        </bhv:Interaction.Triggers>
+                                    </local:TransitionControl>
+                                </DataTemplate>
+                                <DataTemplate DataType="{x:Type vm:NodeViewModel}">
+                                    <local:NodeControl SelectMark="{Binding Selected}">
+                                        <bhv:Interaction.Triggers>
+                                            <bhv:EventTrigger EventName="MouseDown">
+                                                <bhv:InvokeCommandAction Command="{Binding DataContext.MouseDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                           CommandParameter="{Binding}" />
+                                            </bhv:EventTrigger>
+
+                                            <bhv:EventTrigger EventName="MouseUp">
+                                                <bhv:InvokeCommandAction Command="{Binding DataContext.MouseUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                           CommandParameter="{Binding}" />
+                                            </bhv:EventTrigger>
+                                        </bhv:Interaction.Triggers>
+                                    </local:NodeControl>
+                                </DataTemplate>
+                            </ContentControl.Resources>
+                        </ContentControl>
                     
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemContainerStyle>
-                <Style>
-                    <Setter Property="Canvas.Left" Value="{Binding Left}" />
-                    <Setter Property="Canvas.Top" Value="{Binding Top}" />
-                </Style>
-            </ItemsControl.ItemContainerStyle>
-        </ItemsControl>
-    </Canvas>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Left" Value="{Binding Left}" />
+                        <Setter Property="Canvas.Top" Value="{Binding Top}" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+            </ItemsControl>
+        </Canvas>
+    </DockPanel>
 </Window>

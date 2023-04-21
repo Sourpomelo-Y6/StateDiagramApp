@@ -1,10 +1,11 @@
 ﻿using StateDiagramApp.Model;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Media;
 
 namespace StateDiagramApp.ViewModel
 {
-    public class NodeViewModel :ObservableObject
+    public class NodeViewModel : ObservableObject
     {
         internal List<TransitionViewModel> transitionViewModels;
 
@@ -54,7 +55,18 @@ namespace StateDiagramApp.ViewModel
                 OnPropertyChanged("Left");
                 OnPropertyChanged("Top");
             }
-        } 
+        }
+
+        private bool seleced = false;
+        public bool Selected 
+        {
+            get { return seleced; }
+            set 
+            {
+                seleced = value;
+                OnPropertyChanged("Selected");
+            } 
+        }
 
         public NodeViewModel(State state)
         {

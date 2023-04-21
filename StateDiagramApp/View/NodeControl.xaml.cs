@@ -23,6 +23,40 @@ namespace StateDiagramApp.View
         public NodeControl()
         {
             InitializeComponent();
+            SizeChanged += OnSizeChanged;
+            
+        }
+
+        public static readonly DependencyProperty SelectMarkProperty =
+                               DependencyProperty.Register("SelectMark", typeof(bool), typeof(NodeControl), 
+                                                            new PropertyMetadata(false, OnSelectMarkPropertyChanged));
+        public bool SelectMark
+        {
+            get { return (bool)GetValue(SelectMarkProperty); }
+            set { SetValue(SelectMarkProperty, value); }
+        }
+
+        private static void OnSelectMarkPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = d as NodeControl;
+            control.SelectMark = (bool)e.NewValue;
+        }
+
+        private void OnSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            UpdateNode();
+        }
+
+        private void UpdateNode()
+        {
+            if (SelectMark)
+            {
+                Mark.Stroke = Brushes.Red;
+            }
+            else 
+            {
+                Mark.Stroke = Brushes.Transparent;
+            }
         }
     }
 }
