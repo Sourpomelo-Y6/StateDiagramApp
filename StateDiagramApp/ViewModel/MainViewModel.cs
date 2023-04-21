@@ -3,7 +3,9 @@ using StateDiagramApp.View;
 using StateDiagramApp.ViewModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -30,72 +32,37 @@ namespace StateDiagramApp.ViewModel
 
         public enum ControlMode 
         { 
+            None,
             ClickMode,
-            LineMode
+            LineMode,
+            NewMode
         }
  
-        public ControlMode NowMode = ControlMode.ClickMode;
-        private Brush clickModeBrush;
-        public Brush ClickModeBrush
-        { 
-            get { return clickModeBrush; }
-            set 
-            {
-                clickModeBrush = value;
-                OnPropertyChanged("ClickModeBrush");
-            }
-        }
-        private Brush lineModeBrush;
-        public Brush LineModeBrush
-        { 
-            get { return lineModeBrush; }
-            set 
-            {
-                lineModeBrush = value;
-                OnPropertyChanged("LineModeBrush");
-            }
-        }
-
-        public ICommand AddStateCommand { get; private set; }
-        public ICommand AddTransitionCommand { get; private set; }
-        public ICommand DeleteStateCommand { get; private set; }
-        public ICommand DeleteTransitionCommand { get; private set; }
-        public ICommand SelectStateCommand { get; private set; }
-        public ICommand MoveStateCommand { get; private set; }
-
-        public ICommand ChangeModeClickCommand { get; }
-        public ICommand ChangeModeLineCommand { get; }
-
+        public ControlMode NowMode = ControlMode.None;
 
         public ICommand MouseDownCommand { get; }
         public ICommand MouseMoveCommand { get; }
         public ICommand MouseUpCommand { get; }
 
+        public ICommand MouseDownCommand2 { get; }
         public ICommand MouseMoveCommand2 { get; }
+        public ICommand MouseUpCommand2 { get; }
 
         public MainViewModel()
         {
-            ClickModeBrush = Brushes.Red;
-            LineModeBrush = Brushes.Transparent;
+            IsClickRadioButtonSelected = true;
 
             stateDiagram = new StateDiagram();
             States = new ObservableCollection<State>();
-            
-            AddStateCommand = new RelayCommand(AddState);
-            AddTransitionCommand = new RelayCommand(AddTransition);
-            DeleteStateCommand = new RelayCommand(DeleteState);
-            DeleteTransitionCommand = new RelayCommand(DeleteTransition);
-            SelectStateCommand = new RelayCommand<State>(SelectState);
-            MoveStateCommand = new RelayCommand<State>(MoveState);
 
             MouseDownCommand = new RelayCommand<object>(MouseDown);
             MouseMoveCommand = new RelayCommand<object>(MouseMove);
             MouseUpCommand = new RelayCommand<object>(MouseUp);
 
+            MouseDownCommand2 = new RelayCommand<object>(MouseDown2);
             MouseMoveCommand2 = new RelayCommand<object>(MouseMove2);
+            MouseUpCommand2 = new RelayCommand<object>(MouseUp2);
 
-            ChangeModeClickCommand = new RelayCommand(ChangeModeClick);
-            ChangeModeLineCommand = new RelayCommand(ChangeModeLine);
 
             var workState1 = new State("1", new Point(0, 0));
             var workState2 = new State("2", new Point(100, 100)) { };
@@ -158,126 +125,7 @@ namespace StateDiagramApp.ViewModel
             }
         }
 
-        private void ChangeModeLine()
-        {
-            NowMode = ControlMode.LineMode;
 
-            ClickModeBrush = Brushes.Transparent;
-            LineModeBrush = Brushes.Red;
-        }
-
-        private void ChangeModeClick()
-        {
-            NowMode = ControlMode.ClickMode;
-            
-            ClickModeBrush = Brushes.Red;
-            LineModeBrush = Brushes.Transparent;
-        }
-
-        private void AddState()
-        {
-            State state = new State("State " + (States.Count + 1), new Point(100, 100));
-            stateDiagram.States.Add(state);
-            States.Add(state);
-        }
-
-        private void AddTransition()
-        {
-            if (selectedState == null)
-            {
-                MessageBox.Show("Please select a state to add a transition from.");
-                return;
-            }
-
-            StateTransitionWindow transitionWindow = new StateTransitionWindow(States.ToList());
-            if (transitionWindow.ShowDialog() == true)
-            {
-                State toState = transitionWindow.SelectedState;
-                if (stateDiagram.AddTransition(selectedState, toState))
-                {
-                    // Add the transition line to the canvas.
-                    //Line transitionLine = new Line();
-                    //transitionLine.Stroke = Brushes.Black;
-                    //transitionLine.StrokeThickness = 2;
-                    //transitionLine.X1 = selectedState.Position.X + selectedState.Radius;
-                    //transitionLine.Y1 = selectedState.Position.Y + selectedState.Radius;
-                    //transitionLine.X2 = toState.Position.X + toState.Radius;
-                    //transitionLine.Y2 = toState.Position.Y + toState.Radius;
-                    //canvas.Children.Add(transitionLine);
-
-                    UpdateShape();
-                }
-            }
-        }
-
-        //あまり使わない方向で
-        private void UpdateShape()
-        {
-            var newShapes = new ObservableCollection<object>();
-            foreach (var State in States)
-            {
-                newShapes.Add(new NodeViewModel(State));
-                foreach (var transition in State.Transitions)
-                {
-                    //newShapes.Add(new TransitionViewModel() { StartPoint = State.Position, EndPoint = transition.ToState.Position });
-                }
-            }
-            Shapes = newShapes;
-        }
-
-        private void DeleteState()
-        {
-            if (selectedState == null)
-            {
-                MessageBox.Show("Please select a state to delete.");
-                return;
-            }
-
-            stateDiagram.DeleteState(selectedState);
-            States.Remove(selectedState);
-        }
-
-        private void DeleteTransition()
-        {
-            if (selectedState == null)
-            {
-                MessageBox.Show("Please select a state to delete a transition from.");
-                return;
-            }
-
-            StateTransitionWindow transitionWindow = new StateTransitionWindow(selectedState.Transitions.Select(t => t.ToState).ToList());
-            if (transitionWindow.ShowDialog() == true)
-            {
-                State toState = transitionWindow.SelectedState;
-                stateDiagram.DeleteTransition(selectedState, toState);
-
-                // Remove the transition line from the canvas.
-                //IEnumerable<UIElement> linesToDelete = canvas.Children.Cast<UIElement>().Where(e => e is Line && e.Tag != null && e.Tag.ToString() == $"{selectedState.Name} - {toState.Name}");
-                //foreach (UIElement line in linesToDelete)
-                //{
-                //    canvas.Children.Remove(line);
-                //}
-
-                UpdateShape();
-            }
-        }
-
-        private void SelectState(State state)
-        {
-            if (state != null)
-            {
-                selectedState = state;
-            }
-        }
-
-        private void MoveState(State state)
-        {
-            if (state != null)
-            {
-                stateDiagram.MoveState(state, state.Position);
-                
-            }
-        }
 
         private NodeViewModel selectedNode;
         public NodeViewModel SelectedNode 
@@ -339,6 +187,15 @@ namespace StateDiagramApp.ViewModel
                     SelectedNode = Node;
                     isDragging = true;
                 }
+            }
+
+        }
+
+        private void MouseDown2(object parameter) 
+        {
+            if (NowMode == ControlMode.NewMode)
+            {
+                startPoint = Mouse.GetPosition(null);
             }
         }
         
@@ -409,11 +266,33 @@ namespace StateDiagramApp.ViewModel
             }
             else if (NowMode == ControlMode.LineMode) 
             {
-                AddTransition(SelectedNode,SelectedNode2);
+                if (SelectedNode != null && SelectedNode2 != null)
+                {
+                    AddTransition(SelectedNode, SelectedNode2);
+                }
                 isDragging = false;
                 SelectedNode = null;
                 SelectedNode2 = null;
             }
+            
+        }
+
+        private void MouseUp2(object obj)
+        {
+            if (NowMode == ControlMode.NewMode)
+            {
+                AddNode(startPoint);
+            }
+        }
+
+        private void AddNode(Point startPoint)
+        {
+            var node = new State("test",startPoint);
+            States.Add(node);
+            var nodeViewModel = new NodeViewModel(node);
+            NodeViewModels.Add(nodeViewModel);
+            Shapes.Add(nodeViewModel);
+            nodeViewModel.transitionViewModels = new List<TransitionViewModel>();
         }
 
         private void AddTransition(NodeViewModel selectedNode, NodeViewModel selectedNode2)
@@ -426,120 +305,48 @@ namespace StateDiagramApp.ViewModel
             Shapes.Add(newTransitionViewModel);
         }
 
-        private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        public bool IsNewRadioButtonSelected
         {
-            startPoint = e.GetPosition(null);
-            isDragging = true;
-
-            // If a state is selected, start drawing a transition line.
-            if (selectedState != null)
+            get { return _isNewRadioButtonSelected; }
+            set
             {
-                //Line transitionLine = new Line();
-
-                ////Copy code
-                //transitionLine.Stroke = Brushes.Black;
-                //transitionLine.StrokeThickness = 2;
-                //transitionLine.X1 = selectedState.Position.X + selectedState.Radius;
-                //transitionLine.Y1 = selectedState.Position.Y + selectedState.Radius;
-                //transitionLine.X2 = startPoint.X;
-                //transitionLine.Y2 = startPoint.Y;
-                //transitionLine.Tag = $"{selectedState.Name} - ";
-                //canvas.Children.Add(transitionLine);
-
-                UpdateShape();
+                _isNewRadioButtonSelected = value;
+                if (value) {
+                    NowMode = ControlMode.NewMode;
+                }
+                OnPropertyChanged(nameof(IsNewRadioButtonSelected));
             }
         }
+        private bool _isNewRadioButtonSelected;
 
-        private void Canvas_MouseMove(object sender, MouseEventArgs e)
+        public bool IsClickRadioButtonSelected
         {
-            if (isDragging)
+            get { return _isClickRadioButtonSelected; }
+            set
             {
-                Point position = e.GetPosition(null);
-
-                // If a state is selected, update the transition line.
-                if (selectedState != null)
+                _isClickRadioButtonSelected = value;
+                if (value)
                 {
-                    //IEnumerable<UIElement> transitionLines = canvas.Children.Cast<UIElement>().Where(e => e is Line && e.Tag != null && e.Tag.ToString().StartsWith($"{selectedState.Name} - "));
-                    //foreach (UIElement line in transitionLines)
-                    //{
-                    //    ((Line)line).X2 = position.X;
-                    //    ((Line)line).Y2 = position.Y;
-                    //}
-
-
+                    NowMode = ControlMode.ClickMode;
                 }
-                // Otherwise, move the canvas.
-                else
-                {
-                    Vector offset = startPoint - position;
-
-                    //foreach (UIElement item in canvas.Children)
-                    //{
-                    //    if (item is Node)
-                    //    {
-                    //        Node Node = item as Node;
-                    //        Point point = new Point(Canvas.GetLeft(Node), Canvas.GetTop(Node));
-                    //        Canvas.SetLeft(Node, point.X - offset.X);
-                    //        Canvas.SetTop(Node, point.Y - offset.Y);
-                    //    }
-                    //    else if (item is Line)
-                    //    {
-                    //        Line line = item as Line;
-                    //        line.X1 -= offset.X;
-                    //        line.Y1 -= offset.Y;
-                    //        line.X2 -= offset.X;
-                    //        line.Y2 -= offset.Y;
-                    //    }
-                    //}
-
-                    startPoint = position;
-                }
+                OnPropertyChanged(nameof(IsClickRadioButtonSelected));
             }
         }
+        private bool _isClickRadioButtonSelected;
 
-        private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        public bool IsLineRadioButtonSelected
         {
-            isDragging = false;
-
-            //// If a state is selected, add a new state or transition.
-            //if (selectedState != null)
-            //{
-            //    Point position = e.GetPosition(canvas);
-
-            //    // If the mouse is still over the selected state, add a new transition.
-            //    if (position.X >= selectedState.Position.X && position.X <= selectedState.Position.X + selectedState.Radius * 2 &&
-            //        position.Y >= selectedState.Position.Y && position.Y <= selectedState.Position.Y + selectedState.Radius * 2)
-            //    {
-            //        AddTransition();
-            //    }
-            //    // Otherwise, add a new state.
-            //    else
-            //    {
-            //        State state = new State("State " + (States.Count + 1), position);
-            //        stateDiagram.States.Add(state);
-            //        States.Add(state);
-
-            //        // Add the new state to the canvas.
-            //        Node Node = new Node();
-            //        Node.Fill = Brushes.LightBlue;
-            //        Node.Width = 50;
-            //        Node.Height = 50;
-            //        Canvas.SetLeft(Node, position.X);
-            //        Canvas.SetTop(Node, position.Y);
-            //        canvas.Children.Add(Node);
-            //    }
-
-            //    // Remove the transition lines.
-            //    IEnumerable<UIElement> transitionLines = canvas.Children.Cast<UIElement>().Where(e => e is Line && e.Tag != null && e.Tag.ToString().StartsWith($"{selectedState.Name} - "));
-            //    foreach (UIElement line in transitionLines)
-            //    {
-            //        canvas.Children.Remove(line);
-            //    }
-            //}
-
-            selectedState = null;
+            get { return _isLineRadioButtonSelected; }
+            set
+            {
+                _isLineRadioButtonSelected = value;
+                if (value)
+                {
+                    NowMode = ControlMode.LineMode;
+                }
+                OnPropertyChanged(nameof(IsLineRadioButtonSelected));
+            }
         }
-
-
+        private bool _isLineRadioButtonSelected;
     }
 }

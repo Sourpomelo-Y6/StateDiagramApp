@@ -12,7 +12,33 @@
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <DataTemplate x:Key="RadioButtonTemplate1">
+            <StackPanel>
+                <Image Source="/Icons/Click.png"
+               Width="32"
+               Height="32"/>
 
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="RadioButtonTemplate2">
+            <StackPanel>
+                <Image Source="/Icons/New.png"
+               Width="32"
+               Height="32"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="RadioButtonTemplate3">
+            <StackPanel>
+                <Image Source="/Icons/Line.png"
+               Width="32"
+               Height="32"/>
+            </StackPanel>
+        </DataTemplate>
+
+    </Window.Resources>
     <DockPanel >
         <Menu Height="20" DockPanel.Dock="Top">
             <MenuItem Header="_File(F)" InputGestureText="Ctrl+F" >
@@ -23,21 +49,38 @@
                 <MenuItem Header="_Exit(X)" InputGestureText="Ctrl+X" />
             </MenuItem>
         </Menu>
-        <ToolBar Height="40" DockPanel.Dock="Top">
-            <Button Command="{Binding ChangeModeClickCommand}" Background="{Binding ClickModeBrush}">
-                <Image Source="/Icons/Click.png" />
-            </Button>
-            <Button Command="{Binding ChangeModeLineCommand}" Background="{Binding LineModeBrush}">
-                <Image Source="/Icons/Line.png" />
-            </Button>
+        <ToolBar Height="50" DockPanel.Dock="Top">
+            <RadioButton IsChecked="{Binding IsClickRadioButtonSelected}"
+                         ContentTemplate="{StaticResource RadioButtonTemplate1}">
+                
+            </RadioButton>
+            <RadioButton IsChecked="{Binding IsNewRadioButtonSelected}"
+                         ContentTemplate="{StaticResource RadioButtonTemplate2}">
+                
+            </RadioButton>
+            <RadioButton IsChecked="{Binding IsLineRadioButtonSelected}"
+                         ContentTemplate="{StaticResource RadioButtonTemplate3}">
+                
+            </RadioButton>
         </ToolBar>
         <Canvas Background="White" >
             <bhv:Interaction.Triggers>
+                <bhv:EventTrigger EventName="MouseDown">
+                    <bhv:InvokeCommandAction Command="{Binding DataContext.MouseDownCommand2, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                           CommandParameter="{Binding}" />
+                </bhv:EventTrigger>
+
+                <bhv:EventTrigger EventName="MouseUp">
+                    <bhv:InvokeCommandAction Command="{Binding DataContext.MouseUpCommand2, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                           CommandParameter="{Binding}" />
+                </bhv:EventTrigger>
+
                 <bhv:EventTrigger EventName="MouseMove">
 
                     <bhv:InvokeCommandAction Command="{Binding DataContext.MouseMoveCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                            CommandParameter="{Binding}" />
                 </bhv:EventTrigger>
+                
             </bhv:Interaction.Triggers>
             <ItemsControl ItemsSource="{Binding Shapes}">
                 <ItemsControl.ItemsPanel>

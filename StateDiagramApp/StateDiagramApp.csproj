@@ -132,5 +132,8 @@
     <Resource Include="Icons\Click.png" />
     <Resource Include="Icons\Line.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\New.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
