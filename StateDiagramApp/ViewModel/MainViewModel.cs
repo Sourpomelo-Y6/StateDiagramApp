@@ -88,13 +88,14 @@ namespace StateDiagramApp.ViewModel
             {
                 var newNodeViewModel = new NodeViewModel(State);
                 //Shapes.Add(newNodeViewModel);
+                newNodeViewModel.transitionViewModels = new List<TransitionViewModel>();
                 NodeViewModels.Add(newNodeViewModel);
+
             }
-            
+
             foreach (var nodeViewModel in NodeViewModels) 
             {
-                nodeViewModel.transitionViewModels = new List<TransitionViewModel>();
-                foreach (var transition in nodeViewModel.NodeState.Transitions)
+                 foreach (var transition in nodeViewModel.NodeState.Transitions)
                 {
                     var target_state = transition.ToState;
                     NodeViewModel toNodeViewModel = null;
@@ -109,6 +110,7 @@ namespace StateDiagramApp.ViewModel
                     var newTransitionViewModel = new TransitionViewModel(nodeViewModel, toNodeViewModel, transition);
                     Shapes.Add(newTransitionViewModel);
                     nodeViewModel.transitionViewModels.Add(newTransitionViewModel);
+                    toNodeViewModel.transitionViewModels.Add(newTransitionViewModel);
                 }
                 Shapes.Add(nodeViewModel);
             }
