@@ -1,4 +1,5 @@
 ﻿using StateDiagramApp.Model;
+using StateDiagramApp.Utillity;
 using StateDiagramApp.View;
 using StateDiagramApp.ViewModel;
 using System.Collections.Generic;
@@ -62,7 +63,52 @@ namespace StateDiagramApp.ViewModel
             WindowMouseMoveCommand = new RelayCommand<object>(WindowMouseMove);
             WindowMouseUpCommand = new RelayCommand<object>(WindowMouseUp);
 
+            SettingTestState();
 
+            SettingShapes();
+
+            var xml = new XmlFile();
+            xml.WriteXml(States);
+
+        }
+
+        private void SettingShapes()
+        {
+            Shapes = new ObservableCollection<object>();
+            NodeViewModels = new ObservableCollection<NodeViewModel>();
+            foreach (var State in States)
+            {
+                var newNodeViewModel = new NodeViewModel(State);
+                //Shapes.Add(newNodeViewModel);
+                newNodeViewModel.transitionViewModels = new List<TransitionViewModel>();
+                NodeViewModels.Add(newNodeViewModel);
+            }
+
+            foreach (var nodeViewModel in NodeViewModels)
+            {
+                foreach (var transition in nodeViewModel.NodeState.Transitions)
+                {
+                    var target_state = transition.ToState;
+                    NodeViewModel toNodeViewModel = null;
+                    foreach (var nodeViewModel2 in NodeViewModels)
+                    {
+                        if (target_state == nodeViewModel2.NodeState)
+                        {
+                            toNodeViewModel = nodeViewModel2;
+                        }
+                    }
+
+                    var newTransitionViewModel = new TransitionViewModel(nodeViewModel, toNodeViewModel, transition);
+                    Shapes.Add(newTransitionViewModel);
+                    nodeViewModel.transitionViewModels.Add(newTransitionViewModel);
+                    toNodeViewModel.transitionViewModels.Add(newTransitionViewModel);
+                }
+                Shapes.Add(nodeViewModel);
+            }
+        }
+
+        private void SettingTestState()
+        {
             var workState1 = new State("1", new Point(0, 0));
             var workState2 = new State("2", new Point(100, 100)) { };
             var workState3 = new State("3", new Point(0, 100)) { };
@@ -89,42 +135,7 @@ namespace StateDiagramApp.ViewModel
             States.Add(workState2);
             States.Add(workState3);
             States.Add(workState4);
-
-            Shapes = new ObservableCollection<object>();
-            
-            NodeViewModels = new ObservableCollection<NodeViewModel>();
-            foreach (var State in States)
-            {
-                var newNodeViewModel = new NodeViewModel(State);
-                //Shapes.Add(newNodeViewModel);
-                newNodeViewModel.transitionViewModels = new List<TransitionViewModel>();
-                NodeViewModels.Add(newNodeViewModel);
-            }
-
-            foreach (var nodeViewModel in NodeViewModels) 
-            {
-                 foreach (var transition in nodeViewModel.NodeState.Transitions)
-                {
-                    var target_state = transition.ToState;
-                    NodeViewModel toNodeViewModel = null;
-                    foreach (var nodeViewModel2 in NodeViewModels) 
-                    {
-                        if (target_state == nodeViewModel2.NodeState) 
-                        {
-                            toNodeViewModel = nodeViewModel2;
-                        }
-                    } 
-
-                    var newTransitionViewModel = new TransitionViewModel(nodeViewModel, toNodeViewModel, transition);
-                    Shapes.Add(newTransitionViewModel);
-                    nodeViewModel.transitionViewModels.Add(newTransitionViewModel);
-                    toNodeViewModel.transitionViewModels.Add(newTransitionViewModel);
-                }
-                Shapes.Add(nodeViewModel);
-            }
         }
-
-
 
         private NodeViewModel selectedNode;
         public NodeViewModel SelectedNode 

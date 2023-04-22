@@ -63,6 +63,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\StateTransition.cs" />
+    <Compile Include="Utillity\XmlFile.cs" />
     <Compile Include="ViewModel\NodeViewModel.cs" />
     <Compile Include="ViewModel\TransitionViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

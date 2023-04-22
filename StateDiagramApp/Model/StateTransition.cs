@@ -9,5 +9,6 @@
             ToState = toState;
         }
 
+        public StateTransition() { }
     }
 }

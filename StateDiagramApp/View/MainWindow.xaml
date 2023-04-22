@@ -55,21 +55,21 @@
                 
             </RadioButton>
         </ToolBar>
-        <Canvas Background="White" >
+        <Canvas Background="AliceBlue"  >
             <bhv:Interaction.Triggers>
                 <bhv:EventTrigger EventName="MouseDown">
-                    <bhv:InvokeCommandAction Command="{Binding DataContext.WindowMouseDownCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    <bhv:InvokeCommandAction Command="{Binding WindowMouseDownCommand}"
                                                            CommandParameter="{Binding}" />
                 </bhv:EventTrigger>
 
                 <bhv:EventTrigger EventName="MouseUp">
-                    <bhv:InvokeCommandAction Command="{Binding DataContext.WindowMouseUpCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    <bhv:InvokeCommandAction Command="{Binding WindowMouseUpCommand}"
                                                            CommandParameter="{Binding}" />
                 </bhv:EventTrigger>
 
                 <bhv:EventTrigger EventName="MouseMove">
 
-                    <bhv:InvokeCommandAction Command="{Binding DataContext.WindowMouseMoveCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    <bhv:InvokeCommandAction Command="{Binding DataContext.WindowMouseMoveCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
                                                            CommandParameter="{Binding}" />
                 </bhv:EventTrigger>
                 
@@ -77,7 +77,7 @@
             <ItemsControl ItemsSource="{Binding Shapes}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <Canvas Background="White"/>
+                        <Canvas/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>

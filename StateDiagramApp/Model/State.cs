@@ -17,5 +17,7 @@ namespace StateDiagramApp.Model
             Radius = 25;
             Transitions = new List<StateTransition>();
         }
+
+        public State(){}
     }
 }
