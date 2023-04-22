@@ -2,11 +2,12 @@
 {
     public class StateTransition
     {
-        public State ToState { get; set; }
+        public uint ToStateID { get; set; }
+
 
         public StateTransition(State toState)
         {
-            ToState = toState;
+            ToStateID = toState.IDNo;
         }
 
         public StateTransition() { }

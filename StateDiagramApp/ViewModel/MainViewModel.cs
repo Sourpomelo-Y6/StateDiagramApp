@@ -19,7 +19,6 @@ namespace StateDiagramApp.ViewModel
 {
     class MainViewModel : ObservableObject
     {
-        private StateDiagram stateDiagram;
 
         private Point startPoint;
         private bool isDragging;
@@ -50,9 +49,11 @@ namespace StateDiagramApp.ViewModel
 
         public MainViewModel()
         {
+            State.idCounter = 0;
+
             IsClickRadioButtonSelected = true;
 
-            stateDiagram = new StateDiagram();
+            //stateDiagram = new StateDiagram();
             States = new ObservableCollection<State>();
 
             ItemMouseDownCommand = new RelayCommand<object>(ItemMouseDown);
@@ -63,12 +64,17 @@ namespace StateDiagramApp.ViewModel
             WindowMouseMoveCommand = new RelayCommand<object>(WindowMouseMove);
             WindowMouseUpCommand = new RelayCommand<object>(WindowMouseUp);
 
-            SettingTestState();
+            var xml = new XmlFile();
+
+            //SettingTestState();
+
+            ObservableCollection<State> work;
+            xml.ReadXml(out work);
+            States = work;
 
             SettingShapes();
 
-            var xml = new XmlFile();
-            xml.WriteXml(States);
+            //xml.WriteXml(States);
 
         }
 
@@ -84,15 +90,22 @@ namespace StateDiagramApp.ViewModel
                 NodeViewModels.Add(newNodeViewModel);
             }
 
+            uint MaxIDNo = 0;
             foreach (var nodeViewModel in NodeViewModels)
-            {
+            {    
+
+                if (nodeViewModel.NodeState.IDNo < MaxIDNo) 
+                {
+                    MaxIDNo = nodeViewModel.NodeState.IDNo;
+                }
+
                 foreach (var transition in nodeViewModel.NodeState.Transitions)
                 {
-                    var target_state = transition.ToState;
+                    var target_stateID = transition.ToStateID;
                     NodeViewModel toNodeViewModel = null;
                     foreach (var nodeViewModel2 in NodeViewModels)
                     {
-                        if (target_state == nodeViewModel2.NodeState)
+                        if (target_stateID == nodeViewModel2.NodeState.IDNo)
                         {
                             toNodeViewModel = nodeViewModel2;
                         }
@@ -105,6 +118,8 @@ namespace StateDiagramApp.ViewModel
                 }
                 Shapes.Add(nodeViewModel);
             }
+
+            State.idCounter = MaxIDNo + 1;
         }
 
         private void SettingTestState()

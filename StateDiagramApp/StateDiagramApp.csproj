@@ -70,7 +70,6 @@
     <Compile Include="ViewModel\ObservableObject.cs" />
     <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="Model\State.cs" />
-    <Compile Include="Model\StateDiagram.cs" />
     <Compile Include="View\NodeControl.xaml.cs">
       <DependentUpon>NodeControl.xaml</DependentUpon>
     </Compile>
