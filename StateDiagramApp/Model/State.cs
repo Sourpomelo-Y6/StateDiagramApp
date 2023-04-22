@@ -9,7 +9,7 @@ namespace StateDiagramApp.Model
         public uint IDNo;
         public string Name { get; set; }
         public Point Position { get; set; }
-        public double Radius { get; set; }
+       
         public List<StateTransition> Transitions { get; set; }
 
         public State(string name, Point position)
@@ -17,7 +17,7 @@ namespace StateDiagramApp.Model
             IDNo = idCounter++;
             Name = name;
             Position = position;
-            Radius = 25;
+
             Transitions = new List<StateTransition>();
         }
 

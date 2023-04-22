@@ -14,7 +14,12 @@ namespace StateDiagramApp.ViewModel
         {
             get { return nodeState; }
         }
-        
+
+        public string NodeStateName
+        {
+            get { return nodeState.Name; }
+        }
+
         private double left;
         public double Left 
         { 
@@ -70,7 +75,7 @@ namespace StateDiagramApp.ViewModel
                 }
                 else 
                 {
-                    SelectMark = Brushes.Transparent;
+                    SelectMark = Brushes.Black;
                 }
                 OnPropertyChanged("Selected");
             } 
@@ -89,13 +94,13 @@ namespace StateDiagramApp.ViewModel
                 }
                 else
                 {
-                    SelectMark = Brushes.Transparent;
+                    SelectMark = Brushes.Black;
                 }
                 OnPropertyChanged("Selected2");
             }
         }
 
-        private Brush selectMark = Brushes.Transparent;
+        private Brush selectMark = Brushes.Black;
         public Brush SelectMark
         {
             get { return selectMark; }

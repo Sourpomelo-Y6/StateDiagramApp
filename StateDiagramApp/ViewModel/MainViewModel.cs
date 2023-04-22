@@ -34,7 +34,8 @@ namespace StateDiagramApp.ViewModel
             None,
             ClickMode,
             LineMode,
-            NewMode
+            NewMode,
+            PropertyMode
         }
  
         public ControlMode NowMode = ControlMode.None;
@@ -66,11 +67,11 @@ namespace StateDiagramApp.ViewModel
 
             var xml = new XmlFile();
 
-            //SettingTestState();
+            SettingTestState();
 
-            ObservableCollection<State> work;
-            xml.ReadXml(out work);
-            States = work;
+            //ObservableCollection<State> work;
+            //xml.ReadXml(out work);
+            //States = work;
 
             SettingShapes();
 
@@ -94,7 +95,7 @@ namespace StateDiagramApp.ViewModel
             foreach (var nodeViewModel in NodeViewModels)
             {    
 
-                if (nodeViewModel.NodeState.IDNo < MaxIDNo) 
+                if (nodeViewModel.NodeState.IDNo > MaxIDNo) 
                 {
                     MaxIDNo = nodeViewModel.NodeState.IDNo;
                 }
@@ -205,12 +206,19 @@ namespace StateDiagramApp.ViewModel
                     isDragging = true;
                 }
             }
-            else if (NowMode == ControlMode.LineMode) 
+            else if (NowMode == ControlMode.LineMode)
             {
                 if (parameter is NodeViewModel Node)
                 {
                     SelectedNode = Node;
                     isDragging = true;
+                }
+            } 
+            else if (NowMode == ControlMode.PropertyMode) 
+            {
+                if (parameter is NodeViewModel Node)
+                {
+                    SelectedNode = Node;
                 }
             }
 
@@ -290,7 +298,7 @@ namespace StateDiagramApp.ViewModel
                 isDragging = false;
                 SelectedNode = null;
             }
-            else if (NowMode == ControlMode.LineMode) 
+            else if (NowMode == ControlMode.LineMode)
             {
                 if (SelectedNode != null && SelectedNode2 != null)
                 {
@@ -299,6 +307,15 @@ namespace StateDiagramApp.ViewModel
                 isDragging = false;
                 SelectedNode = null;
                 SelectedNode2 = null;
+            }
+            else if (NowMode == ControlMode.PropertyMode) 
+            {
+                if (parameter is NodeViewModel Node)
+                {
+                    PropertyWindow window = new PropertyWindow(Node);
+                    window.Show();
+                }
+                SelectedNode = null;
             }
             
         }
@@ -374,5 +391,20 @@ namespace StateDiagramApp.ViewModel
             }
         }
         private bool _isLineRadioButtonSelected;
+
+        public bool IsPropertyRadioButtonSelected
+        {
+            get { return _isPropertyRadioButtonSelected; }
+            set
+            {
+                _isPropertyRadioButtonSelected = value;
+                if (value)
+                {
+                    NowMode = ControlMode.PropertyMode;
+                }
+                OnPropertyChanged(nameof(IsPropertyRadioButtonSelected));
+            }
+        }
+        private bool _isPropertyRadioButtonSelected;
     }
 }

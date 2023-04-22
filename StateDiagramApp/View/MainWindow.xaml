@@ -30,6 +30,12 @@
             </StackPanel>
         </DataTemplate>
 
+        <DataTemplate x:Key="PropertyRadioButtonTemplate">
+            <StackPanel>
+                <Image Source="/Icons/Property.png" Width="32" Height="32"/>
+            </StackPanel>
+        </DataTemplate>
+
     </Window.Resources>
     <DockPanel >
         <Menu Height="20" DockPanel.Dock="Top">
@@ -53,6 +59,10 @@
             <RadioButton IsChecked="{Binding IsLineRadioButtonSelected}"
                          ContentTemplate="{StaticResource LineRadioButtonTemplate}">
                 
+            </RadioButton>
+            <RadioButton IsChecked="{Binding IsPropertyRadioButtonSelected}"
+                         ContentTemplate="{StaticResource PropertyRadioButtonTemplate}">
+
             </RadioButton>
         </ToolBar>
         <Canvas Background="AliceBlue"  >
