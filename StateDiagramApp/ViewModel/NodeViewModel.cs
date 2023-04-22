@@ -18,6 +18,21 @@ namespace StateDiagramApp.ViewModel
         public string NodeStateName
         {
             get { return nodeState.Name; }
+            set 
+            {
+                nodeState.Name = value;
+                OnPropertyChanged("NodeStateName");
+            }
+        }
+
+        public uint NodeStateID
+        {
+            get { return nodeState.IDNo; }
+            set
+            {
+                nodeState.IDNo = value;
+                OnPropertyChanged("NodeStateID");
+            }
         }
 
         private double left;

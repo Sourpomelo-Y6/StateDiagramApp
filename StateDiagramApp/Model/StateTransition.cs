@@ -4,6 +4,7 @@
     {
         public uint ToStateID { get; set; }
 
+        public string Comment;
 
         public StateTransition(State toState)
         {

@@ -5,8 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StateDiagramApp.View"
         mc:Ignorable="d"
-        Title="PropertyWindow" Height="450" Width="800">
+        Title="PropertyWindow" Height="450" Width="450">
     <Grid>
-        <TextBox Text="{Binding Position.X}" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="NodeStateID"/>
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding NodeStateID}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="NodeStateName"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding NodeStateName}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Position.X"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Position.X}" />
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Position.Y"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Position.Y}" />
+
     </Grid>
 </Window>
