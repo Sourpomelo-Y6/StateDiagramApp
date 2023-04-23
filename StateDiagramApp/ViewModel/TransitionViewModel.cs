@@ -4,7 +4,7 @@ using System.Windows;
 
 namespace StateDiagramApp.ViewModel
 {
-    class TransitionViewModel : ObservableObject
+    public class TransitionViewModel : ObservableObject
     {
         private StateTransition transition;
         private NodeViewModel FromNodeViewModel;
@@ -41,6 +41,39 @@ namespace StateDiagramApp.ViewModel
         {
             OnPropertyChanged("StartPoint");
             OnPropertyChanged("EndPoint");
+            OnPropertyChanged("CommentMargin");
+        }
+
+        public string Comment
+        {
+            get { return transition.Comment; }
+            set
+            {
+                transition.Comment = value;
+                OnPropertyChanged("Comment");
+            }
+        }
+
+        public Thickness CommentMargin
+        {
+            get 
+            {
+                return new Thickness(
+                    (FromNodeViewModel.Position.X + ToNodeViewModel.Position.X) /2,
+                    (FromNodeViewModel.Position.Y + ToNodeViewModel.Position.Y) /2,
+                    0, 0);              
+            }
+
+        }
+
+        public string FromName 
+        {
+            get { return FromNodeViewModel.NodeState.Name; }
+        }
+
+        public string ToName
+        {
+            get { return ToNodeViewModel.NodeState.Name; }
         }
     }
 }

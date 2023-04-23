@@ -40,8 +40,8 @@
     <DockPanel >
         <Menu Height="20" DockPanel.Dock="Top">
             <MenuItem Header="_File(F)" InputGestureText="Ctrl+F" >
-                <MenuItem Header="_Open(O)" InputGestureText="Ctrl+O" Command="{Binding FileOpen}"/>
-                <MenuItem Header="_Save(S)" InputGestureText="Ctrl+S" Command="{Binding FileSave}"/>
+                <MenuItem Header="_Open(O)" InputGestureText="Ctrl+O" Command="{Binding FileLoadCommand}"/>
+                <MenuItem Header="_Save(S)" InputGestureText="Ctrl+S" Command="{Binding FileSaveCommand}"/>
                 
                 <Separator />
                 <MenuItem Header="_Exit(X)" InputGestureText="Ctrl+X" />

@@ -40,6 +40,9 @@ namespace StateDiagramApp.ViewModel
  
         public ControlMode NowMode = ControlMode.None;
 
+        public ICommand FileSaveCommand { get; }
+        public ICommand FileLoadCommand { get; }
+
         public ICommand ItemMouseDownCommand { get; }
         public ICommand ItemMouseMoveCommand { get; }
         public ICommand ItemMouseUpCommand { get; }
@@ -51,11 +54,16 @@ namespace StateDiagramApp.ViewModel
         public MainViewModel()
         {
             State.idCounter = 0;
+            Shapes = new ObservableCollection<object>();
+            NodeViewModels = new ObservableCollection<NodeViewModel>();
 
             IsClickRadioButtonSelected = true;
 
             //stateDiagram = new StateDiagram();
             States = new ObservableCollection<State>();
+
+            FileSaveCommand = new RelayCommand(FileSave);
+            FileLoadCommand = new RelayCommand(FileLoad);
 
             ItemMouseDownCommand = new RelayCommand<object>(ItemMouseDown);
             ItemMouseMoveCommand = new RelayCommand<object>(ItemMouseMove);
@@ -65,29 +73,75 @@ namespace StateDiagramApp.ViewModel
             WindowMouseMoveCommand = new RelayCommand<object>(WindowMouseMove);
             WindowMouseUpCommand = new RelayCommand<object>(WindowMouseUp);
 
-            var xml = new XmlFile();
+            //var xml = new XmlFile();
 
-            SettingTestState();
+            //SettingTestState();
 
             //ObservableCollection<State> work;
             //xml.ReadXml(out work);
             //States = work;
 
-            SettingShapes();
+            //
 
-            //xml.WriteXml(States);
+        }
+
+        private void FileLoad()
+        {
+            // Configure open file dialog box
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+            //dialog.FileName = "Document"; // Default file name
+            dialog.DefaultExt = ".xml"; // Default file extension
+            dialog.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
+
+            // Show open file dialog box
+            bool? result = dialog.ShowDialog();
+
+            // Process open file dialog box results
+            if (result == true)
+            {
+                // Open document
+                string filename = dialog.FileName;
+                var xml = new XmlFile(filename);
+
+                ObservableCollection<State> work;
+                xml.ReadXml(out work);
+                States = work;
+                SettingShapes();
+            }
+
+        }
+
+        private void FileSave()
+        {
+            // Configure save file dialog box
+            var dialog = new Microsoft.Win32.SaveFileDialog();
+            //dialog.FileName = "Document"; // Default file name
+            dialog.DefaultExt = ".xml"; // Default file extension
+            dialog.Filter = "XML documents (.xml)|*.xml"; // Filter files by extension
+
+            // Show save file dialog box
+            bool? result = dialog.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                // Save document
+                string filename = dialog.FileName;
+                var xml = new XmlFile(filename);
+                xml.WriteXml(States);
+            }
 
         }
 
         private void SettingShapes()
         {
-            Shapes = new ObservableCollection<object>();
-            NodeViewModels = new ObservableCollection<NodeViewModel>();
+            Shapes.Clear();
+            NodeViewModels.Clear();
             foreach (var State in States)
             {
                 var newNodeViewModel = new NodeViewModel(State);
                 //Shapes.Add(newNodeViewModel);
-                newNodeViewModel.transitionViewModels = new List<TransitionViewModel>();
+                newNodeViewModel.TransitionViewModels = new ObservableCollection<TransitionViewModel>();
                 NodeViewModels.Add(newNodeViewModel);
             }
 
@@ -114,8 +168,8 @@ namespace StateDiagramApp.ViewModel
 
                     var newTransitionViewModel = new TransitionViewModel(nodeViewModel, toNodeViewModel, transition);
                     Shapes.Add(newTransitionViewModel);
-                    nodeViewModel.transitionViewModels.Add(newTransitionViewModel);
-                    toNodeViewModel.transitionViewModels.Add(newTransitionViewModel);
+                    nodeViewModel.TransitionViewModels.Add(newTransitionViewModel);
+                    toNodeViewModel.TransitionViewModels.Add(newTransitionViewModel);
                 }
                 Shapes.Add(nodeViewModel);
             }
@@ -335,16 +389,17 @@ namespace StateDiagramApp.ViewModel
             var nodeViewModel = new NodeViewModel(node);
             NodeViewModels.Add(nodeViewModel);
             Shapes.Add(nodeViewModel);
-            nodeViewModel.transitionViewModels = new List<TransitionViewModel>();
+            nodeViewModel.TransitionViewModels = new ObservableCollection<TransitionViewModel>();
         }
 
         private void AddTransition(NodeViewModel selectedNode, NodeViewModel selectedNode2)
         {
             var transition = new StateTransition(selectedNode2.NodeState);
+            transition.Comment = "test";
             selectedNode.NodeState.Transitions.Add(transition);
             var newTransitionViewModel = new TransitionViewModel(selectedNode,selectedNode2,transition);
-            selectedNode.transitionViewModels.Add(newTransitionViewModel);
-            selectedNode2.transitionViewModels.Add(newTransitionViewModel);
+            selectedNode.TransitionViewModels.Add(newTransitionViewModel);
+            selectedNode2.TransitionViewModels.Add(newTransitionViewModel);
             Shapes.Add(newTransitionViewModel);
         }
 

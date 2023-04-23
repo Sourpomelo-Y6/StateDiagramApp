@@ -26,5 +26,10 @@ namespace StateDiagramApp.View
 
             DataContext = node;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

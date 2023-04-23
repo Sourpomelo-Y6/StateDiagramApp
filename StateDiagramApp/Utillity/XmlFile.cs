@@ -10,6 +10,13 @@ namespace StateDiagramApp.Utillity
 {
     class XmlFile
     {
+        private string filename;
+
+        public XmlFile(string filename)
+        {
+            this.filename = filename;
+        }
+
         public void ReadXml(out ObservableCollection<State> states)
         {
             // Now we can read the serialized book ...  
@@ -18,7 +25,7 @@ namespace StateDiagramApp.Utillity
 
             try
             {
-                using (var file = new System.IO.StreamReader("test.xml"))
+                using (var file = new System.IO.StreamReader(filename))
                 {
                     states = (ObservableCollection<State>)reader.Deserialize(file);
                 }
@@ -38,7 +45,7 @@ namespace StateDiagramApp.Utillity
 
             try
             {
-                using (var file = System.IO.File.Create("test.xml"))
+                using (var file = System.IO.File.Create(filename))
                 {
                     writer.Serialize(file, states);
                 }

@@ -1,5 +1,6 @@
 ﻿using StateDiagramApp.Model;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
 
@@ -7,7 +8,16 @@ namespace StateDiagramApp.ViewModel
 {
     public class NodeViewModel : ObservableObject
     {
-        internal List<TransitionViewModel> transitionViewModels;
+        private ObservableCollection<TransitionViewModel> transitionViewModels;
+        public ObservableCollection<TransitionViewModel> TransitionViewModels 
+        {
+            get { return transitionViewModels; }
+            set 
+            {
+                transitionViewModels = value;
+                OnPropertyChanged("TransitionViewModels");
+            } 
+        }
 
         private State nodeState;
         public State NodeState 
