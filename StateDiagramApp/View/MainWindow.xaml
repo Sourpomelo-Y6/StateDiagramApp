@@ -65,83 +65,85 @@
 
             </RadioButton>
         </ToolBar>
-        <Canvas Background="AliceBlue"  >
-            <bhv:Interaction.Triggers>
-                <bhv:EventTrigger EventName="MouseDown">
-                    <bhv:InvokeCommandAction Command="{Binding WindowMouseDownCommand}"
+        <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+            <Canvas Background="AliceBlue" Width="1000" Height="1000" >
+                <bhv:Interaction.Triggers>
+                    <bhv:EventTrigger EventName="MouseDown">
+                        <bhv:InvokeCommandAction Command="{Binding WindowMouseDownCommand}"
                                                            CommandParameter="{Binding}" />
-                </bhv:EventTrigger>
+                    </bhv:EventTrigger>
 
-                <bhv:EventTrigger EventName="MouseUp">
-                    <bhv:InvokeCommandAction Command="{Binding WindowMouseUpCommand}"
+                    <bhv:EventTrigger EventName="MouseUp">
+                        <bhv:InvokeCommandAction Command="{Binding WindowMouseUpCommand}"
                                                            CommandParameter="{Binding}" />
-                </bhv:EventTrigger>
+                    </bhv:EventTrigger>
 
-                <bhv:EventTrigger EventName="MouseMove">
+                    <bhv:EventTrigger EventName="MouseMove">
 
-                    <bhv:InvokeCommandAction Command="{Binding DataContext.WindowMouseMoveCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
+                        <bhv:InvokeCommandAction Command="{Binding DataContext.WindowMouseMoveCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
                                                            CommandParameter="{Binding}" />
-                </bhv:EventTrigger>
-                
-            </bhv:Interaction.Triggers>
-            <ItemsControl ItemsSource="{Binding Shapes}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <ContentControl Content="{Binding}">
-                            <ContentControl.Resources>
-                                <DataTemplate DataType="{x:Type vm:TransitionViewModel}">
-                                    <local:TransitionControl >
-                                        <bhv:Interaction.Triggers>
-                                            <bhv:EventTrigger EventName="MouseDown">
-                                                <bhv:InvokeCommandAction Command="{Binding DataContext.ItemMouseDownCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
-                                                           CommandParameter="{Binding}" />
-                                            </bhv:EventTrigger>
+                    </bhv:EventTrigger>
 
-                                            <bhv:EventTrigger EventName="MouseUp">
-                                                <bhv:InvokeCommandAction Command="{Binding DataContext.ItemMouseUpCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
+                </bhv:Interaction.Triggers>
+                <ItemsControl ItemsSource="{Binding Shapes}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ContentControl Content="{Binding}">
+                                <ContentControl.Resources>
+                                    <DataTemplate DataType="{x:Type vm:TransitionViewModel}">
+                                        <local:TransitionControl >
+                                            <bhv:Interaction.Triggers>
+                                                <bhv:EventTrigger EventName="MouseDown">
+                                                    <bhv:InvokeCommandAction Command="{Binding DataContext.ItemMouseDownCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
                                                            CommandParameter="{Binding}" />
-                                            </bhv:EventTrigger>
-                                        </bhv:Interaction.Triggers>
-                                    </local:TransitionControl>
-                                </DataTemplate>
-                                <DataTemplate DataType="{x:Type vm:NodeViewModel}">
-                                    <local:NodeControl>
-                                        <bhv:Interaction.Triggers>
-                                            <bhv:EventTrigger EventName="MouseDown">
-                                                <bhv:InvokeCommandAction Command="{Binding DataContext.ItemMouseDownCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
-                                                           CommandParameter="{Binding}" />
-                                            </bhv:EventTrigger>
+                                                </bhv:EventTrigger>
 
-                                            <bhv:EventTrigger EventName="MouseUp">
-                                                <bhv:InvokeCommandAction Command="{Binding DataContext.ItemMouseUpCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
+                                                <bhv:EventTrigger EventName="MouseUp">
+                                                    <bhv:InvokeCommandAction Command="{Binding DataContext.ItemMouseUpCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
                                                            CommandParameter="{Binding}" />
-                                            </bhv:EventTrigger>
-
-                                            <bhv:EventTrigger EventName="MouseMove">
-
-                                                <bhv:InvokeCommandAction Command="{Binding DataContext.ItemMouseMoveCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
+                                                </bhv:EventTrigger>
+                                            </bhv:Interaction.Triggers>
+                                        </local:TransitionControl>
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type vm:NodeViewModel}">
+                                        <local:NodeControl>
+                                            <bhv:Interaction.Triggers>
+                                                <bhv:EventTrigger EventName="MouseDown">
+                                                    <bhv:InvokeCommandAction Command="{Binding DataContext.ItemMouseDownCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
                                                            CommandParameter="{Binding}" />
-                                            </bhv:EventTrigger>
-                                        </bhv:Interaction.Triggers>
-                                    </local:NodeControl>
-                                </DataTemplate>
-                            </ContentControl.Resources>
-                        </ContentControl>
-                    
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemContainerStyle>
-                    <Style>
-                        <Setter Property="Canvas.Left" Value="{Binding Left}" />
-                        <Setter Property="Canvas.Top" Value="{Binding Top}" />
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-            </ItemsControl>
-        </Canvas>
+                                                </bhv:EventTrigger>
+
+                                                <bhv:EventTrigger EventName="MouseUp">
+                                                    <bhv:InvokeCommandAction Command="{Binding DataContext.ItemMouseUpCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
+                                                           CommandParameter="{Binding}" />
+                                                </bhv:EventTrigger>
+
+                                                <bhv:EventTrigger EventName="MouseMove">
+
+                                                    <bhv:InvokeCommandAction Command="{Binding DataContext.ItemMouseMoveCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
+                                                           CommandParameter="{Binding}" />
+                                                </bhv:EventTrigger>
+                                            </bhv:Interaction.Triggers>
+                                        </local:NodeControl>
+                                    </DataTemplate>
+                                </ContentControl.Resources>
+                            </ContentControl>
+
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style>
+                            <Setter Property="Canvas.Left" Value="{Binding Left}" />
+                            <Setter Property="Canvas.Top" Value="{Binding Top}" />
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
+            </Canvas>
+        </ScrollViewer>
     </DockPanel>
 </Window>
