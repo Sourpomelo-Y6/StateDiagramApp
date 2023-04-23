@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace StateDiagramApp.ViewModel
@@ -141,6 +142,41 @@ namespace StateDiagramApp.ViewModel
             this.nodeState = state;
             left = state.Position.X;
             top = state.Position.Y;
+
+            DeleteTransitionCommand = new RelayCommand<object>(DeleteTransition);
+        }
+
+
+        private TransitionViewModel selectedTransition;
+        public TransitionViewModel SelectedTransition 
+        {
+            get { return selectedTransition; }
+            set 
+            {
+                selectedTransition = value;
+                OnPropertyChanged("SelectedTransition");
+            }
+        
+        }
+
+        public ICommand DeleteTransitionCommand { get; }
+
+        public void DeleteTransition(object parameter)
+        {
+            if (selectedTransition != null)
+            {
+                nodeState.Transitions.Remove(selectedTransition.GetTransition());
+                transitionViewModels.Remove(selectedTransition);
+                //selectedTransition.Delete();
+                //foreach (var transition in nodeState.Transitions) 
+                //{
+                //    if (transition.isDelete) 
+                //    {
+                //        nodeState.Transitions.Remove(transition);
+                //        break;
+                //    }
+                //}
+            }
         }
     }
 

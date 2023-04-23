@@ -7,6 +7,11 @@ namespace StateDiagramApp.ViewModel
     public class TransitionViewModel : ObservableObject
     {
         private StateTransition transition;
+        public StateTransition GetTransition()
+        {
+            return transition; 
+        }
+
         private NodeViewModel FromNodeViewModel;
         private NodeViewModel ToNodeViewModel;
 
@@ -75,5 +80,6 @@ namespace StateDiagramApp.ViewModel
         {
             get { return ToNodeViewModel.NodeState.Name; }
         }
+
     }
 }

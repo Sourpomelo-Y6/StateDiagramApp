@@ -23,5 +23,11 @@ namespace StateDiagramApp.View
         {
             InitializeComponent();
         }
+
+        private void MenuClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
     }
 }

@@ -20,6 +20,7 @@
             <RowDefinition Height="20"/>
             <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
@@ -37,7 +38,7 @@
 
         <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
             <TextBlock Text="TransitionList"/>
-            <ListView ItemsSource="{Binding TransitionViewModels}" Margin="10">
+            <ListView ItemsSource="{Binding TransitionViewModels}" SelectedItem="{Binding SelectedTransition}" Margin="10">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -51,7 +52,11 @@
                 </ListView.ItemTemplate>
             </ListView>
         </StackPanel>
-        <StackPanel Grid.Row="6" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top">
+        <StackPanel Grid.Row="6" Grid.Column="0" >
+            <Button Content="Delete" Margin="5" Command="{Binding DeleteTransitionCommand}"  />
+           
+        </StackPanel>
+        <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top">
             <Button Content="OK" Margin="5" Click="Button_Click" />
             <!--<Button Content="Cancel" Margin="5" Command="{Binding CancelCommand}" />-->
         </StackPanel>

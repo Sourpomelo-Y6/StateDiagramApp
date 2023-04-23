@@ -2,6 +2,7 @@
 {
     public class StateTransition
     {
+        
         public uint ToStateID { get; set; }
 
         public string Comment;

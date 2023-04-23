@@ -91,7 +91,7 @@ namespace StateDiagramApp.ViewModel
             var dialog = new Microsoft.Win32.OpenFileDialog();
             //dialog.FileName = "Document"; // Default file name
             dialog.DefaultExt = ".xml"; // Default file extension
-            dialog.Filter = "Text documents (.xml)|*.xml"; // Filter files by extension
+            dialog.Filter = "XML documents (.xml)|*.xml"; // Filter files by extension
 
             // Show open file dialog box
             bool? result = dialog.ShowDialog();
@@ -461,5 +461,6 @@ namespace StateDiagramApp.ViewModel
             }
         }
         private bool _isPropertyRadioButtonSelected;
+
     }
 }
