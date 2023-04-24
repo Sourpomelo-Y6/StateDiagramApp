@@ -36,6 +36,12 @@
             </StackPanel>
         </DataTemplate>
 
+        <DataTemplate x:Key="DeleteRadioButtonTemplate">
+            <StackPanel>
+                <Image Source="/Icons/Delete.png" Width="32" Height="32"/>
+            </StackPanel>
+        </DataTemplate>
+
     </Window.Resources>
     <DockPanel >
         <Menu Height="20" DockPanel.Dock="Top">
@@ -62,6 +68,10 @@
             </RadioButton>
             <RadioButton IsChecked="{Binding IsPropertyRadioButtonSelected}"
                          ContentTemplate="{StaticResource PropertyRadioButtonTemplate}">
+
+            </RadioButton>
+            <RadioButton IsChecked="{Binding IsDeleteRadioButtonSelected}"
+                         ContentTemplate="{StaticResource DeleteRadioButtonTemplate}">
 
             </RadioButton>
         </ToolBar>

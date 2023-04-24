@@ -35,7 +35,8 @@ namespace StateDiagramApp.ViewModel
             ClickMode,
             LineMode,
             NewMode,
-            PropertyMode
+            PropertyMode,
+            DeleteMode
         }
  
         public ControlMode NowMode = ControlMode.None;
@@ -371,15 +372,53 @@ namespace StateDiagramApp.ViewModel
                 }
                 SelectedNode = null;
             }
-            
+            else if (NowMode == ControlMode.DeleteMode)
+            {
+                if (parameter is NodeViewModel Node)
+                {
+                    DeleteNode(Node);
+                }
+            }
+
         }
 
-        private void WindowMouseUp(object obj)
+        private void WindowMouseUp(object parameter)
         {
             if (NowMode == ControlMode.NewMode)
             {
                 AddNode(startPoint);
             }
+
+        }
+
+        private void DeleteNode(NodeViewModel node)
+        {
+            foreach (var transition in node.TransitionViewModels) 
+            {
+                var ToNode = transition.ToNodeViewModel;
+                List<TransitionViewModel> DeleteList = new List<TransitionViewModel>();
+                foreach (var toTransition in ToNode.TransitionViewModels) 
+                {
+                    if (toTransition.FromNodeViewModel == node) 
+                    {
+                        DeleteList.Add(toTransition);
+                        //ToNode.TransitionViewModels.Remove(toTransition);
+                        continue;
+                    }
+                }
+
+                foreach (var target in DeleteList) 
+                {
+                    ToNode.TransitionViewModels.Remove(target);
+                    Shapes.Remove(target);
+                }
+
+                Shapes.Remove(transition);
+            }
+
+            Shapes.Remove(node);
+            States.Remove(node.NodeState);
+            NodeViewModels.Remove(node);
         }
 
         private void AddNode(Point startPoint)
@@ -462,5 +501,19 @@ namespace StateDiagramApp.ViewModel
         }
         private bool _isPropertyRadioButtonSelected;
 
+        public bool IsDeleteRadioButtonSelected
+        {
+            get { return _isDeleteRadioButtonSelected; }
+            set
+            {
+                _isDeleteRadioButtonSelected = value;
+                if (value)
+                {
+                    NowMode = ControlMode.DeleteMode;
+                }
+                OnPropertyChanged(nameof(IsDeleteRadioButtonSelected));
+            }
+        }
+        private bool _isDeleteRadioButtonSelected;
     }
 }

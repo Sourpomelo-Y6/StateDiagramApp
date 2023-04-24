@@ -12,13 +12,22 @@ namespace StateDiagramApp.ViewModel
             return transition; 
         }
 
-        private NodeViewModel FromNodeViewModel;
-        private NodeViewModel ToNodeViewModel;
+        private NodeViewModel fromNodeViewModel;
+        public NodeViewModel FromNodeViewModel
+        {
+            get { return fromNodeViewModel; }
+        }
+
+        private NodeViewModel toNodeViewModel;
+        public NodeViewModel ToNodeViewModel 
+        {
+            get { return toNodeViewModel; }
+        }
 
         public TransitionViewModel(NodeViewModel fromNodeViewModel, NodeViewModel toNodeViewModel,StateTransition transition)
         {
-            this.FromNodeViewModel = fromNodeViewModel;
-            this.ToNodeViewModel = toNodeViewModel;
+            this.fromNodeViewModel = fromNodeViewModel;
+            this.toNodeViewModel = toNodeViewModel;
             this.transition = transition;
         }
 
@@ -27,7 +36,7 @@ namespace StateDiagramApp.ViewModel
             get { return FromNodeViewModel.Position; }
             set
             {
-                FromNodeViewModel.Position = value;
+                fromNodeViewModel.Position = value;
                 OnPropertyChanged("StartPoint");
             }
         }
@@ -37,7 +46,7 @@ namespace StateDiagramApp.ViewModel
             get { return ToNodeViewModel.Position; }
             set 
             {
-                ToNodeViewModel.Position = value;
+                toNodeViewModel.Position = value;
                 OnPropertyChanged("EndPoint");
             }
         }
