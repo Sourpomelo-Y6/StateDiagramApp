@@ -283,7 +283,14 @@ namespace StateDiagramApp.ViewModel
         {
             if (NowMode == ControlMode.NewMode)
             {
-                startPoint = Mouse.GetPosition(null);
+                if (parameter is Canvas canvas)
+                {
+                    startPoint = Mouse.GetPosition(canvas);
+                }
+                else 
+                {
+                    startPoint = Mouse.GetPosition(null);
+                }
             }
         }
 
@@ -423,7 +430,7 @@ namespace StateDiagramApp.ViewModel
 
         private void AddNode(Point startPoint)
         {
-            var node = new State("test",startPoint);
+            var node = new State("",startPoint);
             States.Add(node);
             var nodeViewModel = new NodeViewModel(node);
             NodeViewModels.Add(nodeViewModel);
@@ -434,7 +441,7 @@ namespace StateDiagramApp.ViewModel
         private void AddTransition(NodeViewModel selectedNode, NodeViewModel selectedNode2)
         {
             var transition = new StateTransition(selectedNode2.NodeState);
-            transition.Comment = "test";
+            //transition.Comment = "test";
             selectedNode.NodeState.Transitions.Add(transition);
             var newTransitionViewModel = new TransitionViewModel(selectedNode,selectedNode2,transition);
             selectedNode.TransitionViewModels.Add(newTransitionViewModel);

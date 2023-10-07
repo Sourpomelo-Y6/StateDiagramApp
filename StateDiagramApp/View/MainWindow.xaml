@@ -76,22 +76,22 @@
             </RadioButton>
         </ToolBar>
         <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
-            <Canvas Background="AliceBlue" Width="1000" Height="1000" >
+            <Canvas x:Name="mainCanvas" Background="AliceBlue" Width="1000" Height="1000" >
                 <bhv:Interaction.Triggers>
                     <bhv:EventTrigger EventName="MouseDown">
-                        <bhv:InvokeCommandAction Command="{Binding WindowMouseDownCommand}"
-                                                           CommandParameter="{Binding}" />
+                        <bhv:InvokeCommandAction Command="{Binding DataContext.WindowMouseDownCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
+                                                           CommandParameter="{Binding ElementName=mainCanvas}" />
                     </bhv:EventTrigger>
 
                     <bhv:EventTrigger EventName="MouseUp">
-                        <bhv:InvokeCommandAction Command="{Binding WindowMouseUpCommand}"
-                                                           CommandParameter="{Binding}" />
+                        <bhv:InvokeCommandAction Command="{Binding DataContext.WindowMouseUpCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
+                                                           CommandParameter="{Binding ElementName=mainCanvas}" />
                     </bhv:EventTrigger>
 
                     <bhv:EventTrigger EventName="MouseMove">
 
                         <bhv:InvokeCommandAction Command="{Binding DataContext.WindowMouseMoveCommand, RelativeSource={RelativeSource AncestorType=Canvas}}"
-                                                           CommandParameter="{Binding}" />
+                                                           CommandParameter="{Binding ElementName=mainCanvas}" />
                     </bhv:EventTrigger>
 
                 </bhv:Interaction.Triggers>
