@@ -26,6 +26,8 @@ namespace StateDiagramApp.ViewModel
 
         public TransitionViewModel(NodeViewModel fromNodeViewModel, NodeViewModel toNodeViewModel,StateTransition transition)
         {
+            left = 0;
+            top = 0;
             this.fromNodeViewModel = fromNodeViewModel;
             this.toNodeViewModel = toNodeViewModel;
             this.transition = transition;
@@ -79,6 +81,29 @@ namespace StateDiagramApp.ViewModel
             }
 
         }
+
+        private double left;
+        public double Left
+        {
+            get { return left; }
+            //set 
+            //{
+            //    left = value;
+            //    OnPropertyChanged("Left");
+            //} 
+        }
+
+        private double top;
+        public double Top
+        {
+            get { return top; }
+            //set 
+            //{
+            //    top = value;
+            //    OnPropertyChanged("Top");
+            //}
+        }
+
 
         public string FromName 
         {

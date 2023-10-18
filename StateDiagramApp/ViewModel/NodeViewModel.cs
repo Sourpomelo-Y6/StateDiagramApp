@@ -165,8 +165,25 @@ namespace StateDiagramApp.ViewModel
         {
             if (selectedTransition != null)
             {
+                var from = selectedTransition.FromNodeViewModel;
+                var to = selectedTransition.ToNodeViewModel;
+                NodeViewModel target;
+                if (nodeState.IDNo == from.NodeStateID)
+                {
+                    target = to;
+                }
+                else 
+                {
+                    target = from;
+                }
+
+                target.NodeState.Transitions.Remove(selectedTransition.GetTransition());
+                target.transitionViewModels.Remove(selectedTransition);
+
                 nodeState.Transitions.Remove(selectedTransition.GetTransition());
                 transitionViewModels.Remove(selectedTransition);
+
+                
                 //selectedTransition.Delete();
                 //foreach (var transition in nodeState.Transitions) 
                 //{

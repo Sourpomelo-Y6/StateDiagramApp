@@ -375,7 +375,8 @@ namespace StateDiagramApp.ViewModel
                 if (parameter is NodeViewModel Node)
                 {
                     PropertyWindow window = new PropertyWindow(Node);
-                    window.Show();
+                    window.ShowDialog();
+                    SettingShapes();
                 }
                 SelectedNode = null;
             }

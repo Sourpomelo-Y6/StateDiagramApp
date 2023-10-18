@@ -31,5 +31,6 @@ namespace StateDiagramApp.View
         {
             this.Close();
         }
+
     }
 }
