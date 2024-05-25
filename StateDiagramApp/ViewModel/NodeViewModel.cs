@@ -182,8 +182,8 @@ namespace StateDiagramApp.ViewModel
 
                 nodeState.Transitions.Remove(selectedTransition.GetTransition());
                 transitionViewModels.Remove(selectedTransition);
+                //[Todo]二重登録時に問題が発生する
 
-                
                 //selectedTransition.Delete();
                 //foreach (var transition in nodeState.Transitions) 
                 //{

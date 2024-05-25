@@ -170,7 +170,10 @@ namespace StateDiagramApp.ViewModel
                     var newTransitionViewModel = new TransitionViewModel(nodeViewModel, toNodeViewModel, transition);
                     Shapes.Add(newTransitionViewModel);
                     nodeViewModel.TransitionViewModels.Add(newTransitionViewModel);
-                    toNodeViewModel.TransitionViewModels.Add(newTransitionViewModel);
+                    if (toNodeViewModel != null)//[todo]上のtoNodeViewModelがnullになる
+                    {
+                        toNodeViewModel.TransitionViewModels.Add(newTransitionViewModel);
+                    }
                 }
                 Shapes.Add(nodeViewModel);
             }
@@ -401,27 +404,39 @@ namespace StateDiagramApp.ViewModel
 
         private void DeleteNode(NodeViewModel node)
         {
-            foreach (var transition in node.TransitionViewModels) 
+            
+            List<TransitionViewModel> DeleteList = new List<TransitionViewModel>();
+            foreach (var transition in node.TransitionViewModels)
             {
                 var ToNode = transition.ToNodeViewModel;
-                List<TransitionViewModel> DeleteList = new List<TransitionViewModel>();
-                foreach (var toTransition in ToNode.TransitionViewModels) 
+                foreach (var toTransition in ToNode.TransitionViewModels)
                 {
-                    if (toTransition.FromNodeViewModel == node) 
+                    if (toTransition.FromNodeViewModel == node)
                     {
                         DeleteList.Add(toTransition);
                         //ToNode.TransitionViewModels.Remove(toTransition);
                         continue;
                     }
                 }
+            }
 
-                foreach (var target in DeleteList) 
+            for (int i = 0; i < node.TransitionViewModels.Count; i++)
+            {
+                var ToNode = node.TransitionViewModels[i].ToNodeViewModel;
+                foreach (var target in DeleteList)
                 {
                     ToNode.TransitionViewModels.Remove(target);
+                    //Shapes.Remove(target);
+                }
+
+                foreach (var target in DeleteList)
+                {
+                    //ToNode.TransitionViewModels.Remove(target);
                     Shapes.Remove(target);
                 }
 
-                Shapes.Remove(transition);
+
+                Shapes.Remove(node.TransitionViewModels[i]);
             }
 
             Shapes.Remove(node);
